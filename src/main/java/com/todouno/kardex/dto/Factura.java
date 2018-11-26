@@ -9,7 +9,7 @@ public class Factura {
 	private Date fecha;
 	private double totalFactura;
 	private Vendedor vendedor;
-	private long iva;
+	private double iva;
 	private long total;
 	private List<DetalleFactura> detalles;
 
@@ -56,11 +56,11 @@ public class Factura {
 		this.totalFactura = totalFactura;
 	}
 
-	public long getIva() {
+	public double getIva() {
 		return iva;
 	}
 
-	public void setIva(long iva) {
+	public void setIva(double iva) {
 		this.iva = iva;
 	}
 
@@ -73,8 +73,15 @@ public class Factura {
 	}
 
 	public boolean isValidoParaRegistrar() {
-		// TODO Auto-generated method stub
-		return false;
+		return (vendedor.getCodigo() > 0 && detalles.size() > 0);
+	}
+
+	public List<DetalleFactura> getDetalles() {
+		return detalles;
+	}
+
+	public void setDetalles(List<DetalleFactura> detalles) {
+		this.detalles = detalles;
 	}
 
 }

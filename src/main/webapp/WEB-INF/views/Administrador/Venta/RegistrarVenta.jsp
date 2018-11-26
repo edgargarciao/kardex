@@ -304,7 +304,7 @@
 				
 				var result = $.grep(productos, function(e){ return e.codigo == productoId; });
 				var resultCantidad = $.grep(cantidades, function(e){ return e.codigo == productoId; });
-				if(resultCantidad[0].stock >= cantidad){
+				if(Number(resultCantidad[0].stock) >= Number(cantidad)){
 					crearItemEnTablaDeProductos(result[0].codigo,result[0].precio, cantidad,nombre);
 					resultCantidad[0].stock = resultCantidad[0].stock - cantidad;
 				}else{
@@ -374,15 +374,30 @@
 			var iva = document.getElementById("iva").value;
 			var total = document.getElementById("total").value;
 			
-			if(vendedor > 0 && cliente > 0){
+			//if(vendedor > 0 && cliente > 0){
+				
+				if(vendedor > 0){
 			
 						var ruta = document.getElementById("ruta").value;
+						
+						var table = document.getElementById('bootstrap-data-table');
+						var detallesVentas = [];
+					    for (var r = 1, n = table.rows.length; r < n; r++) {
+					    						    	 
+					    	  
+							var detalleVenta = {
+									  producto: 		    { codigo :  Number(table.rows[r].cells[6].innerHTML.trim())},								
+									  cantidad: 			Number(table.rows[r].cells[2].innerHTML.trim())
+							};	
+					    	  detallesVentas.push(detalleVenta);
+					    }					
+
 						var formData = {
-								  vendedor: 		    vendedor,								
-						          //cliente: 				cliente,
-						          totalSinImpuesto:		totalsi,
+								  vendedor: 		    {codigo:vendedor},								
+								  detalles: 			detallesVentas,
+						          total:				totalsi,
 						          iva:					iva,
-						          total:				total				
+						          totalFactura:			total				
 						};
 						
 						$.ajax({
@@ -399,13 +414,13 @@
 								    for (var r = 1, n = table.rows.length; n > 1;) {
 								    	
 								    		document.getElementById("bootstrap-data-table").deleteRow(r);
-								    		n = table.rows.length;
-								    		
-								    		
+								    		n = table.rows.length;								    										    		
 								    }
 									pintarRegistroExitoso();	
-									
-									
+									document.getElementById("totalsi").value = 0;
+									document.getElementById("iva").value = 0;
+									document.getElementById("total").value = 0;
+									window.location.href = ruta+ "/ventas";
 								}else{
 									pintarRegistroNoExitoso(result.trim(),"error");
 								}

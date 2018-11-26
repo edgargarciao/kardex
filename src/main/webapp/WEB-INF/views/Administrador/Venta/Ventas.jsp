@@ -87,9 +87,10 @@
 									class="table table-striped table-bordered">
 									<thead>
 										<tr>
-											<th scope="col" style="width: 25%">Fecha de emision</th>
-											<th scope="col" style="width: 35%">Vendedor</th>
-											<th scope="col" style="width: 40%">Total de la venta</th>
+											<th scope="col" style="width: 20%">Fecha de emision</th>
+											<th scope="col" style="width: 30%">Vendedor</th>
+											<th scope="col" style="width: 45%">Total de la venta</th>
+											<th scope="col" style="width: 15%">Acción</th>
 											
 										</tr>
 									</thead>
@@ -99,6 +100,12 @@
 												<td scope="row">${venta.fecha}</td>
 												<td scope="row">${venta.vendedor.nombres}</td>
 												<td scope="row">${venta.totalFactura}</td>
+												<td><a
+													href="${contextPath}/actualizarProducto?id=${producto.codigo}">
+														<button class="btn btn-outline-secondary">
+															<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+														</button>
+												</a></td>
 											</tr>
 										</c:forEach>
 									</tbody>
