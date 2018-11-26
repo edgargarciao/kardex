@@ -1,7 +1,10 @@
 package com.todouno.kardex.dao;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import com.todouno.kardex.data.DataMgr;
@@ -125,7 +128,7 @@ public class ProductoDao {
     MapSqlParameterSource map = new MapSqlParameterSource();
     map.addValue("codigo", producto.getCodigo());
 
-    // Armar la sentencia de actualización debase de datos
+    // Armar la sentencia de actualizacion debase de datos
     String query = "DELETE FROM PRODUCTO WHERE codigo = :codigo";
 
     // Ejecutar la sentencia
@@ -140,5 +143,52 @@ public class ProductoDao {
     return (result == 1) ? "Eliminacion exitosa"
         : "Error en el sistema. Por favor contacte al administrador.";
   }
+  
+	public Map<Integer, String> getMapaDeProductos() {
+		// Lista para retornar con los datos
+		Map<Integer, String> productos = new HashMap<Integer, String>();
 
+		// Consulta para realizar en base de datos
+		SqlRowSet sqlRowSet = dataMgr.executeQuery(" SELECT * FROM PRODUCTO WHERE stock > 0 ORDER BY codigo ASC ");
+
+		// Recorre cada registro obtenido de base de datos
+		while (sqlRowSet.next()) {
+			productos.put(sqlRowSet.getInt("codigo"), sqlRowSet.getString("nombre"));
+		}
+
+		// Retorna todos las categorias desde base de datos
+		return productos;
+	}
+
+	public Map<Integer, Integer> getMapaDePrecioProductos() {
+		// Lista para retornar con los datos
+		Map<Integer, Integer> productos = new HashMap<Integer, Integer>();
+
+		// Consulta para realizar en base de datos
+		SqlRowSet sqlRowSet = dataMgr.executeQuery(" SELECT * FROM PRODUCTO WHERE stock > 0 ORDER BY codigo ASC ");
+
+		// Recorre cada registro obtenido de base de datos
+		while (sqlRowSet.next()) {
+			productos.put(sqlRowSet.getInt("codigo"), sqlRowSet.getInt("Precio"));
+		}
+
+		// Retorna todos las categorias desde base de datos
+		return productos;
+	}
+	
+	public Map<Integer, Integer> getMapaDeCantidadProductos() {
+		// Lista para retornar con los datos
+		Map<Integer, Integer> productos = new HashMap<Integer, Integer>();
+
+		// Consulta para realizar en base de datos
+		SqlRowSet sqlRowSet = dataMgr.executeQuery(" SELECT * FROM PRODUCTO WHERE stock > 0 ORDER BY codigo ASC ");
+
+		// Recorre cada registro obtenido de base de datos
+		while (sqlRowSet.next()) {
+			productos.put(sqlRowSet.getInt("codigo"), sqlRowSet.getInt("stock"));
+		}
+
+		// Retorna todos las categorias desde base de datos
+		return productos;
+	}
 }

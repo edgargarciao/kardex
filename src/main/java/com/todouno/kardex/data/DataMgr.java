@@ -33,11 +33,23 @@ public class DataMgr {
     dataSource = new DriverManagerDataSource(DB_URL);
     executeDml("DROP ALL OBJECTS");
     executeDml("CREATE TABLE IF NOT EXISTS TIPOPRODUCTO ( codigo int auto_increment primary key NOT NULL, nombre VARCHAR(1000) NOT NULL , descripcion VARCHAR(1000) NOT NULL) ");
-    executeDml("INSERT INTO  TIPOPRODUCTO(nombre,descripcion) VALUES('LACTEOS','En esta sección se ingresan productos como: leches, quesos, entre otros')");
-    executeDml("INSERT INTO  TIPOPRODUCTO(nombre,descripcion) VALUES('HARINAS','En esta sección se ingresan productos como: Harina normal, Harina precocida, entre otros')");
+    executeDml("INSERT INTO  TIPOPRODUCTO(nombre,descripcion) VALUES('Camisetas','En esta seccion se ingresan productos como: Camiseta super man, Camiseta Batman, entre otros')");
+    executeDml("INSERT INTO  TIPOPRODUCTO(nombre,descripcion) VALUES('Vasos','En esta seccion se ingresan productos como: Vaso Holk, Vaso mujer maravilla, entre otros')");
+    executeDml("INSERT INTO  TIPOPRODUCTO(nombre,descripcion) VALUES('Comics','En esta seccion se ingresan productos como: Comics archie, Comics los gemelos fantasticos, entre otros')");
+    executeDml("INSERT INTO  TIPOPRODUCTO(nombre,descripcion) VALUES('Jueguetes','En esta seccion se ingresan productos como: Mu�eco Holk, Mucheco superman, entre otros')");
+    executeDml("INSERT INTO  TIPOPRODUCTO(nombre,descripcion) VALUES('Accesorios','En esta seccion se ingresan productos como: Manilla Thor, Cadena superman, entre otros')");
+    
     executeDml("CREATE TABLE IF NOT EXISTS PRODUCTO ( codigo int auto_increment primary key NOT NULL, nombre VARCHAR(1000) NOT NULL , stock int  NOT NULL ,precio int  NOT NULL , tipoProducto int NOT NULL, foreign key (tipoProducto) references TIPOPRODUCTO(codigo) ) ");
+    
+    executeDml("INSERT INTO  PRODUCTO(nombre, stock, precio, tipoProducto) VALUES('Vaso holk','12','13400',2)");
+    executeDml("INSERT INTO  PRODUCTO(nombre, stock, precio, tipoProducto) VALUES('Vaso spiderman','20','12300',2)");
+    executeDml("INSERT INTO  PRODUCTO(nombre, stock, precio, tipoProducto) VALUES('Camiseta thor','10','72600',1)");
+    executeDml("INSERT INTO  PRODUCTO(nombre, stock, precio, tipoProducto) VALUES('Camiseta batman','30','34950',1)");
+    executeDml("INSERT INTO  PRODUCTO(nombre, stock, precio, tipoProducto) VALUES('Camiseta archie','0','12000',1)");
+    
     executeDml("CREATE TABLE IF NOT EXISTS VENDEDOR ( codigo int auto_increment primary key NOT NULL, nombres VARCHAR(1000) NOT NULL , documento VARCHAR(1000) NOT NULL , telefono VARCHAR(1000) NOT NULL, correo VARCHAR(1000) NOT NULL, fechaNacimiento DATE NOT NULL) ");
-    executeDml("CREATE TABLE IF NOT EXISTS FACTURA ( codigo int auto_increment primary key NOT NULL, fecha DATE NOT NULL , totalFactura INT NOT NULL, vendedor int NOT NULL, foreign key (vendedor) references VENDEDOR(codigo) ) ");
+    executeDml("INSERT INTO  VENDEDOR(nombres, documento, telefono, correo, fechaNacimiento ) VALUES('Julian Hernesto Martinez Bedoya','10907897654','3208974523','Julian@gmail.com','1994-02-02')");
+    executeDml("CREATE TABLE IF NOT EXISTS FACTURA ( codigo int auto_increment primary key NOT NULL, fecha DATE NOT NULL , totalFactura DOUBLE NOT NULL, vendedor int NOT NULL, foreign key (vendedor) references VENDEDOR(codigo) ) ");
     executeDml("CREATE TABLE IF NOT EXISTS DETALLE ( codigo int auto_increment primary key NOT NULL, cantidad VARCHAR(1000) NOT NULL , producto int NOT NULL, factura int NOT NULL, foreign key (producto) references PRODUCTO(codigo), foreign key (factura) references FACTURA(codigo) ) ");
   }
  

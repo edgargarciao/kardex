@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.todouno.kardex.constantes.Mensajes;
 import com.todouno.kardex.dao.TipoProductoDao;
 import com.todouno.kardex.dto.TipoProducto;
 
@@ -25,9 +27,9 @@ public class TipoProductoController {
   }
 
   /**
-   * Método que retorna una pagina con todas los tipos de productos en el sistema.
+   * Metodo que retorna una pagina con todas los tipos de productos en el sistema.
    * 
-   * @return La página principal de tipos de productos.
+   * @return La pagina principal de tipos de productos.
    */
   @GetMapping("/tipoProductos") // Base
   public String index(Model model) {
@@ -59,9 +61,9 @@ public class TipoProductoController {
   /**
    * Servicio que permite guardar un tipo de producto
    * 
-   * @param tipoProducto Objeto con la información a guardar
-   * @param model Modelo con la información necesaria para transportar a los archivos .JSP
-   * @return La página a donde debe redireccionar después de la acción.
+   * @param tipoProducto Objeto con la informacion a guardar
+   * @param model Modelo con la informacion necesaria para transportar a los archivos .JSP
+   * @return La pagina a donde debe redireccionar después de la accion.
    */
   @PostMapping(value = "/guardarTipoProducto")
   public String registrarTipoProducto(@ModelAttribute("tipoProducto") TipoProducto tipoProducto,
@@ -72,7 +74,7 @@ public class TipoProductoController {
 
       String mensaje = tipoProductoDao.registrarTipoDeProducto(tipoProducto);
       if (mensaje.equals("Registro exitoso")) {
-        model.addAttribute("result", "Tipo de producto registrado con éxito.");
+        model.addAttribute("result", String.format(Mensajes.MENSAJEEXITO, "Tipo de producto","registrado"));
         model.addAttribute("tipoProductos", tipoProductoDao.getTipoProductos());
         return "Administrador/TipoProducto/TipoProductos"; // Nombre del archivo jsp
       } else {
@@ -87,11 +89,11 @@ public class TipoProductoController {
   }
 
   /**
-   * Método que obtiene la pagina de actualizar un tipo de producto dado un ID.
+   * Metodo que obtiene la pagina de actualizar un tipo de producto dado un ID.
    * 
    * @param idActualizar Identificador del tipo de producto
-   * @param model Objeto para enviar información a los archivos .JSP
-   * @return La pagina con la información del tipo de producto.
+   * @param model Objeto para enviar informacion a los archivos .JSP
+   * @return La pagina con la informacion del tipo de producto.
    */
   @GetMapping(value = "/actualizarTipoProducto")
   public String actualizarTipoProducto(@RequestParam("id") long idTipoProducto, Model model) {
@@ -108,9 +110,9 @@ public class TipoProductoController {
   /**
    * Servicio que permite editar un tipo de producto.
    * 
-   * @param tipoProducto Objeto con la información a editar.
-   * @param model Modelo con la información necesaria para transportar a los archivos .JSP
-   * @return La página a donde debe redireccionar después de la acción.
+   * @param tipoProducto Objeto con la informacion a editar.
+   * @param model Modelo con la informacion necesaria para transportar a los archivos .JSP
+   * @return La pagina a donde debe redireccionar despues de la accion.
    */
   @PostMapping(value = "/editarTipoProducto")
   public String editarTipoProducto(@ModelAttribute("tipoProducto") TipoProducto tipoProducto,
@@ -122,7 +124,7 @@ public class TipoProductoController {
       String mensaje = tipoProductoDao.editarTipoProducto(tipoProducto);
 
       if (mensaje.equals("Actualizacion exitosa")) {
-        model.addAttribute("result", "Tipo de producto actualizado con éxito.");
+        model.addAttribute("result", String.format(Mensajes.MENSAJEEXITO, "Tipo de producto", "actualizado"));
         model.addAttribute("tipoProductos", tipoProductoDao.getTipoProductos());
         return "Administrador/TipoProducto/TipoProductos"; // Nombre del archivo jsp
       } else {
@@ -130,17 +132,17 @@ public class TipoProductoController {
         return actualizarTipoProducto(tipoProducto.getCodigo(), model);
       }
     } else {
-      model.addAttribute("wrong", "Debes llenar todos los campos.");
+      model.addAttribute("wrong", Mensajes.LLENARTODOSLOSCAMPOS);
       return actualizarTipoProducto(tipoProducto.getCodigo(), model);
     }
   }
 
   /**
-   * Método que obtiene la pagina de eliminar un tipo de producto dado un ID.
+   * Metodo que obtiene la pagina de eliminar un tipo de producto dado un ID.
    * 
    * @param idTipoProducto Identificador del tipo de producto
-   * @param model Objeto para enviar información a los archivos .JSP
-   * @return La pagina con la información del tipo de producto.
+   * @param model Objeto para enviar informacion a los archivos .JSP
+   * @return La pagina con la informacion del tipo de producto.
    */
   @GetMapping(value = "/eliminarTipoProducto")
   public String eliminarTipoProducto(@RequestParam("id") long idTipoProducto, Model model) {
@@ -157,16 +159,16 @@ public class TipoProductoController {
   /**
    * Servicio que permite eliminar un tipo de producto.
    * 
-   * @param tipoProducto Objeto con la información a eliminar.
-   * @param model Modelo con la información necesaria para transportar a los archivos .JSP
-   * @return La página a donde debe redireccionar después de la acción.
+   * @param tipoProducto Objeto con la informacion a eliminar.
+   * @param model Modelo con la informacion necesaria para transportar a los archivos .JSP
+   * @return La pagina a donde debe redireccionar despues de la accion.
    */
   @PostMapping(value = "/borrarTipoProducto")
   public String borrarTipoProducto(@ModelAttribute("tipoProducto") TipoProducto tipoProducto, Model model) {
     
       String mensaje = tipoProductoDao.eliminarTipoProducto(tipoProducto);
       if (mensaje.equals("Eliminacion exitosa")) {
-        model.addAttribute("result", "Tipo de producto eliminado con éxito.");
+        model.addAttribute("result", String.format(Mensajes.MENSAJEEXITO, "Tipo de producto","eliminado") );
         model.addAttribute("tipoProductos", tipoProductoDao.getTipoProductos());
         return "Administrador/TipoProducto/TipoProductos"; // Nombre del archivo jsp        
       } else {

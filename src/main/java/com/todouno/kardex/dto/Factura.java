@@ -1,45 +1,80 @@
 package com.todouno.kardex.dto;
 
 import java.sql.Date;
+import java.util.List;
 
 public class Factura {
 
-  private int codigo;
-  private Date fecha;
-  private int totalFactura;
-  private Vendedor vendedor;
+	private int codigo;
+	private Date fecha;
+	private double totalFactura;
+	private Vendedor vendedor;
+	private long iva;
+	private long total;
+	private List<DetalleFactura> detalles;
 
-  public int getCodigo() {
-    return codigo;
-  }
+	// Este es un comodin
+	private int producto;
 
-  public void setCodigo(int codigo) {
-    this.codigo = codigo;
-  }
+	public int getCodigo() {
+		return codigo;
+	}
 
-  public Date getFecha() {
-    return fecha;
-  }
+	public void setCodigo(int codigo) {
+		this.codigo = codigo;
+	}
 
-  public void setFecha(Date fecha) {
-    this.fecha = fecha;
-  }
+	public Date getFecha() {
+		return fecha;
+	}
 
-  public int getTotalFactura() {
-    return totalFactura;
-  }
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
+	}
 
-  public void setTotalFactura(int totalFactura) {
-    this.totalFactura = totalFactura;
-  }
+	public Vendedor getVendedor() {
+		return vendedor;
+	}
 
-  public Vendedor getVendedor() {
-    return vendedor;
-  }
+	public void setVendedor(Vendedor vendedor) {
+		this.vendedor = vendedor;
+	}
 
-  public void setVendedor(Vendedor vendedor) {
-    this.vendedor = vendedor;
-  }
+	public int getProducto() {
+		return producto;
+	}
 
+	public void setProducto(int producto) {
+		this.producto = producto;
+	}
+
+	public double getTotalFactura() {
+		return totalFactura;
+	}
+
+	public void setTotalFactura(double totalFactura) {
+		this.totalFactura = totalFactura;
+	}
+
+	public long getIva() {
+		return iva;
+	}
+
+	public void setIva(long iva) {
+		this.iva = iva;
+	}
+
+	public long getTotal() {
+		return total;
+	}
+
+	public void setTotal(long total) {
+		this.total = total;
+	}
+
+	public boolean isValidoParaRegistrar() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }

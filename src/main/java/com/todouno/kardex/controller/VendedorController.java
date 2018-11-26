@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.todouno.kardex.constantes.Mensajes;
 import com.todouno.kardex.dao.VendedorDao;
 import com.todouno.kardex.dao.VendedorDao;
 import com.todouno.kardex.dto.Vendedor;
@@ -28,9 +30,9 @@ public class VendedorController {
   }
 
   /**
-   * Método que retorna una pagina con todas los vendedores en el sistema.
+   * Metodo que retorna una pagina con todas los vendedores en el sistema.
    * 
-   * @return La página principal de vendedores.
+   * @return La pagina principal de vendedores.
    */
   @GetMapping("/vendedores") // Base
   public String index(Model model) {
@@ -50,9 +52,9 @@ public class VendedorController {
   }
 
   /**
-   * Método que retorna una pagina para realizar el registro de un vendedor.
+   * Metodo que retorna una pagina para realizar el registro de un vendedor.
    * 
-   * @return La página de registro de vendedores.
+   * @return La pagina de registro de vendedores.
    */
   @GetMapping("/registrarVendedor") // Base
   public String registrarVendedor() {
@@ -62,9 +64,9 @@ public class VendedorController {
   /**
    * Servicio que permite guardar un vendedor
    * 
-   * @param vendedor Objeto con la información a guardar
-   * @param model Modelo con la información necesaria para transportar a los archivos .JSP
-   * @return La página a donde debe redireccionar después de la acción.
+   * @param vendedor Objeto con la informacion a guardar
+   * @param model Modelo con la informacion necesaria para transportar a los archivos .JSP
+   * @return La pagina a donde debe redireccionar despues de la accion.
    */
   @PostMapping(value = "/guardarVendedor", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
   public String guardarVendedor(@ModelAttribute("vendedor") Vendedor vendedor,
@@ -75,7 +77,7 @@ public class VendedorController {
 
       String mensaje = vendedorDao.registrarVendedor(vendedor);
       if (mensaje.equals("Registro exitoso")) {
-        model.addAttribute("result", "Vendedor registrado con éxito.");
+        model.addAttribute("result", String.format(Mensajes.MENSAJEEXITO, "Vendedor","registrado"));
         model.addAttribute("vendedores", vendedorDao.getVendedores());
         return "Administrador/Vendedor/Vendedores"; // Nombre del archivo jsp
       } else {
@@ -84,17 +86,17 @@ public class VendedorController {
       }
 
     } else {
-      model.addAttribute("wrong", "Debes llenar todos los campos.");
+      model.addAttribute("wrong", Mensajes.LLENARTODOSLOSCAMPOS);
       return "Administrador/Vendedor/RegistrarVendedor"; // Nombre del archivo jsp
     }
   }
 
   /**
-   * Método que obtiene la pagina de actualizar un vendedor dado un ID.
+   * Metodo que obtiene la pagina de actualizar un vendedor dado un ID.
    * 
    * @param idVendedor Identificador del vendedor
-   * @param model Objeto para enviar información a los archivos .JSP
-   * @return La pagina con la información del vendedor.
+   * @param model Objeto para enviar informacion a los archivos .JSP
+   * @return La pagina con la informacion del vendedor.
    */
   @GetMapping(value = "/actualizarVendedor")
   public String actualizarVendedor(@RequestParam("id") long idVendedor, Model model) {
@@ -111,9 +113,9 @@ public class VendedorController {
   /**
    * Servicio que permite editar un vendedor.
    * 
-   * @param vendedor Objeto con la información a editar.
-   * @param model Modelo con la información necesaria para transportar a los archivos .JSP
-   * @return La página a donde debe redireccionar después de la acción.
+   * @param vendedor Objeto con la informacion a editar.
+   * @param model Modelo con la informacion necesaria para transportar a los archivos .JSP
+   * @return La pagina a donde debe redireccionar despues de la accion.
    */
   @PostMapping(value = "/editarVendedor")
   public String editarvendedor(@ModelAttribute("vendedor") Vendedor vendedor,
@@ -125,7 +127,7 @@ public class VendedorController {
       String mensaje = vendedorDao.editarVendedor(vendedor);
 
       if (mensaje.equals("Actualizacion exitosa")) {
-        model.addAttribute("result", "vendedor actualizado con éxito.");
+        model.addAttribute("result", String.format(Mensajes.MENSAJEEXITO, "Vendedor","actualizado"));
         model.addAttribute("endedores", vendedorDao.getVendedores());
         return "Administrador/Vendedor/Vendedores"; // Nombre del archivo jsp
       } else {
@@ -133,17 +135,17 @@ public class VendedorController {
         return actualizarVendedor(vendedor.getCodigo(), model);
       }
     } else {
-      model.addAttribute("wrong", "Debes llenar todos los campos.");
+      model.addAttribute("wrong", Mensajes.LLENARTODOSLOSCAMPOS);
       return actualizarVendedor(vendedor.getCodigo(), model);
     }
   }
 
   /**
-   * Método que obtiene la pagina de eliminar un vendedor dado un ID.
+   * Metodo que obtiene la pagina de eliminar un vendedor dado un ID.
    * 
    * @param idVendedor Identificador del vendedor
-   * @param model Objeto para enviar información a los archivos .JSP
-   * @return La pagina con la información del vendedor.
+   * @param model Objeto para enviar informacion a los archivos .JSP
+   * @return La pagina con la informacion del vendedor.
    */
   @GetMapping(value = "/eliminarVendedor")
   public String eliminarVendedor(@RequestParam("id") long idVendedor, Model model) {
@@ -160,16 +162,16 @@ public class VendedorController {
   /**
    * Servicio que permite eliminar un vendedor.
    * 
-   * @param vendedor Objeto con la información a eliminar.
-   * @param model Modelo con la información necesaria para transportar a los archivos .JSP
-   * @return La página a donde debe redireccionar después de la acción.
+   * @param vendedor Objeto con la informacion a eliminar.
+   * @param model Modelo con la informacion necesaria para transportar a los archivos .JSP
+   * @return La pagina a donde debe redireccionar despues de la accion.
    */
   @PostMapping(value = "/borrarVendedor")
   public String borrarVendedor(@ModelAttribute("vendedor") Vendedor vendedor, Model model) {
     
       String mensaje = vendedorDao.eliminarVendedor(vendedor);
       if (mensaje.equals("Eliminacion exitosa")) {
-        model.addAttribute("result", "Vendedor eliminado con éxito.");
+        model.addAttribute("result", String.format(Mensajes.MENSAJEEXITO, "Vendedor","eliminado"));
         model.addAttribute("vendedores", vendedorDao.getVendedores());
         return "Administrador/Vendedor/Vendedores"; // Nombre del archivo jsp        
       } else {
