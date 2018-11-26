@@ -50,8 +50,9 @@
 
             <div class="col-lg-3 col-md-6">
                 <div class="social-box google-plus">
-                    <i class="fa fa-list"></i>                            
-                            <span>Tipos de productos</span>
+                    <i class="fa fa-reorder"></i>          
+                    		<strong><span class="count">${catidadTipoProductos}</span></strong>                  
+                            <span>Tipos de productos</span>                            
                     </div>
                 <!--/social-box-->
             </div><!--/.col--> 
@@ -59,7 +60,8 @@
             
             <div class="col-lg-3 col-md-6">
                 <div class="social-box google-plus">
-                    <i class="fa fa-list-ol"></i>                   
+                    <i class="fa fa-list-ol"></i>     
+                             <strong><span class="count">${catidadProductos}</span></strong> 
                             <span>Productos</span>
                     </div>
                 <!--/social-box-->
@@ -67,7 +69,8 @@
 
             <div class="col-lg-3 col-md-6">
                 <div class="social-box google-plus">
-                    <i class="fa fa-list"></i>                            
+                    <i class="fa fa-user"></i>     
+                    		<strong><span class="count">${catidadVendedores}</span></strong>                        
                             <span>Vendedores</span>
                     </div>
                 <!--/social-box-->
@@ -76,7 +79,8 @@
 
             <div class="col-lg-3 col-md-6">
                 <div class="social-box google-plus">
-                    <i class="fa fa-edit"></i>
+                    <i class="fa fa-shopping-bag"></i>
+                    		<strong><span class="count">${catidadVentas}</span></strong>      
                             <span>Ventas</span>
                     </div>
                 <!--/social-box-->

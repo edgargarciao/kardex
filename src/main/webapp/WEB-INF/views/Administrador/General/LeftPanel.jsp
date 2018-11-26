@@ -30,14 +30,14 @@
 				<h3 class="menu-title">Negocio</h3>
 				<!-- /.menu-title -->
 				<li><a href="${contextPath}/tipoProductos"> <i
-						class="menu-icon ti-list"></i>Tipos de producto
+						class="menu-icon fa fa-reorder"></i>Tipos de producto
 				</a></li>
 				<li><a href="${contextPath}/productos"> <i class="menu-icon ti-list-ol"></i>Productos
 				</a></li>
 				<li><a href="${contextPath}/vendedores"> <i
-						class="menu-icon ti-list"></i>Vendedores
+						class="menu-icon ti-user"></i>Vendedores
 				</a></li>
-				<li><a href="${contextPath}/ventas"> <i class="menu-icon fa fa-edit"></i>Ventas
+				<li><a href="${contextPath}/ventas"> <i class="menu-icon fa fa-shopping-bag"></i>Ventas
 				</a></li>				
 			</ul>
 		</div>

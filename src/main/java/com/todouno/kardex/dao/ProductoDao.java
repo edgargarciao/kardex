@@ -191,4 +191,9 @@ public class ProductoDao {
 		// Retorna todos las categorias desde base de datos
 		return productos;
 	}
+
+
+	public Object getCantidadRegistros() {
+		return getProductos().size();
+	}
 }

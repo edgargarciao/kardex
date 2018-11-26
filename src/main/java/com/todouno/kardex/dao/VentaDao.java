@@ -38,11 +38,35 @@ public class VentaDao {
 			factura.setFecha(sqlRowSet.getDate("fecha"));
 			factura.setVendedor(vendedorDao.obtenerVendedorPorId(sqlRowSet.getInt("vendedor")));
 			factura.setTotalFactura(sqlRowSet.getDouble("totalFactura"));
-
+			factura.setDetalles(getDetalles(sqlRowSet.getInt("codigo"),factura));
 			// Guarda el registro para ser retornado
 			facturas.add(factura);
 		}
 		return facturas;
+	}
+
+	private List<DetalleFactura> getDetalles(int codigoFactura, Factura factura) {
+		List<DetalleFactura> detalles = new LinkedList<>();
+
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("codigoFactura", codigoFactura);
+		
+		// Consulta para realizar en base de datos
+		SqlRowSet sqlRowSet = dataMgr.executeQuery(" SELECT * FROM DETALLE WHERE factura = :codigoFactura",map);
+
+		// Recorre cada registro obtenido de base de datos
+		while (sqlRowSet.next()) {
+			// Objeto en el que sera guardada la informacion del registro
+			DetalleFactura detalle = new DetalleFactura();
+			detalle.setCodigo(sqlRowSet.getInt("codigo"));
+			detalle.setCantidad(sqlRowSet.getInt("cantidad"));
+			detalle.setFactura(factura);
+			detalle.setProducto(productoDao.obtenerProductoPorId(sqlRowSet.getInt("producto")));
+			
+			// Guarda el registro para ser retornado
+			detalles.add(detalle);
+		}
+		return detalles;
 	}
 
 	public String registrarVenta(Factura venta) {
@@ -66,59 +90,64 @@ public class VentaDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		insertarDetalles(result.getKey(),venta);
+
+		insertarDetalles(result.getKey(), venta);
 		// Si hubieron filas afectadas es por que si hubo registro, en caso
 		// contrario muestra el mensaje
 		// de error.
-		return (result.getResult() == 1) ? "Registro exitoso" : "Error en el sistema. Por favor contacte al administrador.";
+		return (result.getResult() == 1) ? "Registro exitoso"
+				: "Error en el sistema. Por favor contacte al administrador.";
 
 	}
 
 	private void insertarDetalles(long idFactura, Factura venta) {
-		for(DetalleFactura detalleFactura : venta.getDetalles()){
-			 // Agrego los datos del registro (nombreColumna/Valor)
+		for (DetalleFactura detalleFactura : venta.getDetalles()) {
+			// Agrego los datos del registro (nombreColumna/Valor)
 
-		    MapSqlParameterSource map = new MapSqlParameterSource();    
-		    map.addValue("cantidad", detalleFactura.getCantidad());
-		    map.addValue("producto", detalleFactura.getProducto().getCodigo());
-		    map.addValue("factura", idFactura);
-		    
-		    // Armar la sentencia de actualizacion debase de datos
-		    String query = "INSERT INTO DETALLE(cantidad,producto,factura) VALUES(:cantidad,:producto,:factura)";
+			MapSqlParameterSource map = new MapSqlParameterSource();
+			map.addValue("cantidad", detalleFactura.getCantidad());
+			map.addValue("producto", detalleFactura.getProducto().getCodigo());
+			map.addValue("factura", idFactura);
 
-		    // Ejecutar la sentencia
-		    try {
-		      dataMgr.executeDml(query, map);
-		    } catch (Exception e) {
-		      e.printStackTrace();
-		    }
-		    
-		    actualizarStockProducto(detalleFactura.getProducto().getCodigo(), detalleFactura.getCantidad());
-		    
+			// Armar la sentencia de actualizacion debase de datos
+			String query = "INSERT INTO DETALLE(cantidad,producto,factura) VALUES(:cantidad,:producto,:factura)";
+
+			// Ejecutar la sentencia
+			try {
+				dataMgr.executeDml(query, map);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			actualizarStockProducto(detalleFactura.getProducto().getCodigo(), detalleFactura.getCantidad());
+
 		}
-		
+
 	}
 
 	private void actualizarStockProducto(int codigoProducto, int cantidad) {
 		Producto producto = productoDao.obtenerProductoPorId(codigoProducto);
-		
-		 // Agrego los datos del registro (nombreColumna/Valor)
 
-	    MapSqlParameterSource map = new MapSqlParameterSource();    
-	    map.addValue("cantidad", producto.getCantidad() - cantidad);	    
-	    map.addValue("codigo", codigoProducto);
-	    
-	    // Armar la sentencia de actualizacion debase de datos
-	    String query = "UPDATE PRODUCTO SET stock = :cantidad WHERE codigo = :codigo";
+		// Agrego los datos del registro (nombreColumna/Valor)
 
-	    // Ejecutar la sentencia
-	    try {
-	      dataMgr.executeDml(query, map);
-	    } catch (Exception e) {
-	      e.printStackTrace();
-	    }
-	    
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("cantidad", producto.getCantidad() - cantidad);
+		map.addValue("codigo", codigoProducto);
+
+		// Armar la sentencia de actualizacion debase de datos
+		String query = "UPDATE PRODUCTO SET stock = :cantidad WHERE codigo = :codigo";
+
+		// Ejecutar la sentencia
+		try {
+			dataMgr.executeDml(query, map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public Object getCantidadRegistros() {
+		return getVentas().size();
 	}
 
 }

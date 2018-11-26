@@ -91,7 +91,7 @@
 											<th scope="col" style="width: 30%">Vendedor</th>
 											<th scope="col" style="width: 45%">Total de la venta</th>
 											<th scope="col" style="width: 15%">Acción</th>
-											
+
 										</tr>
 									</thead>
 									<tbody>
@@ -100,12 +100,12 @@
 												<td scope="row">${venta.fecha}</td>
 												<td scope="row">${venta.vendedor.nombres}</td>
 												<td scope="row">${venta.totalFactura}</td>
-												<td><a
-													href="${contextPath}/actualizarProducto?id=${producto.codigo}">
-														<button class="btn btn-outline-secondary">
-															<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-														</button>
-												</a></td>
+												<td>
+													<button class="btn btn-outline-secondary">
+														<i class="fa fa-pencil-square-o" aria-hidden="true"
+															data-toggle="modal" data-target="#largeModal-${venta.codigo}"></i>
+													</button>
+												</td>
 											</tr>
 										</c:forEach>
 									</tbody>
@@ -127,6 +127,53 @@
 	<!-- /#right-panel -->
 
 	<!-- Right Panel -->
+
+	<!-- Modals -->
+
+	<!-- Modal -->
+
+	<c:forEach var="venta" items="${ventas}">
+
+		<div class="modal fade" id="largeModal-${venta.codigo}" tabindex="-1" role="dialog"
+			aria-labelledby="largeModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+
+						<h5 class="modal-title" id="largeModalLabel">Detalle de la
+							venta # ${venta.codigo}</h5>
+						 <h5 class="modal-title" id="largeModalLabel">Total de la
+							venta ${venta.totalFactura}</h5>
+					</div>
+						<div class="modal-body">
+							<table id="bootstrap-data-table"
+								class="table table-striped table-bordered">
+								<thead>
+									<tr>
+										<th scope="col" style="width: 20%">Producto</th>
+										<th scope="col" style="width: 30%">Valor del producto</th>
+										<th scope="col" style="width: 30%">Cantidad</th>
+									</tr>
+								</thead>
+								<tbody>
+									<c:forEach var="detalle" items="${venta.detalles}">
+										<tr>
+											<td scope="row">${detalle.producto.nombre}</td>
+											<td scope="row">${detalle.producto.precio}</td>
+											<td scope="row">${detalle.cantidad}</td>
+
+										</tr>
+									</c:forEach>
+								</tbody>
+							</table>
+
+						</div>
+					</div>
+				</div>
+			</div>
+	</c:forEach>
+
+	<!--  /Modals -->
 
 	<!-- Carga de los archivos Javascript -->
 	<%@ include file="../General/scripts.jsp"%>

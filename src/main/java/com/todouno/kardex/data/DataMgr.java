@@ -51,6 +51,8 @@ public class DataMgr {
     executeDml("INSERT INTO  VENDEDOR(nombres, documento, telefono, correo, fechaNacimiento ) VALUES('Julian Hernesto Martinez Bedoya','10907897654','3208974523','Julian@gmail.com','1994-02-02')");
     executeDml("CREATE TABLE IF NOT EXISTS FACTURA ( codigo int auto_increment primary key NOT NULL, fecha DATE NOT NULL , totalFactura DOUBLE NOT NULL, total INT NOT NULL, iva DOUBLE NOT NULL, vendedor int NOT NULL, foreign key (vendedor) references VENDEDOR(codigo) ) ");
     executeDml("CREATE TABLE IF NOT EXISTS DETALLE ( codigo int auto_increment primary key NOT NULL, cantidad VARCHAR(1000) NOT NULL , producto int NOT NULL, factura int NOT NULL, foreign key (producto) references PRODUCTO(codigo), foreign key (factura) references FACTURA(codigo) ) ");
+    executeDml("CREATE TABLE IF NOT EXISTS USUARIO ( correo VARCHAR(1000) NOT NULL primary key, contrasena VARCHAR(1000) NOT NULL) ");
+    executeDml("INSERT INTO  USUARIO(correo,contrasena) VALUES('eygarcia@softcaribbean.com','1234')");
   }
  
   

@@ -1,5 +1,6 @@
 package com.todouno.kardex.controller;
 
+import javax.activation.ActivationDataFlavor;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,108 +11,143 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import com.todouno.kardex.config.SessionManager;
 import com.todouno.kardex.dao.LoginDao;
+import com.todouno.kardex.dao.ProductoDao;
+import com.todouno.kardex.dao.TipoProductoDao;
+import com.todouno.kardex.dao.VendedorDao;
+import com.todouno.kardex.dao.VentaDao;
 import com.todouno.kardex.dto.Login;
 import com.todouno.kardex.util.JwtUtil;
 
 @Controller
 public class AdminController {
 
-  @Autowired
-  private SessionManager sessionManager;
-  
-  private JwtUtil jwtUtil;
-  private LoginDao loginDao;
+	@Autowired
+	private SessionManager sessionManager;
 
-  public AdminController() {
-    jwtUtil = new JwtUtil();
-    loginDao = new LoginDao();
-  }
+	private JwtUtil jwtUtil;
+	private LoginDao loginDao;
+	private TipoProductoDao tipoProductoDao;
+	private ProductoDao productoDao;
+	private VendedorDao vendedorDao;
+	private VentaDao ventaDao;
 
-  @GetMapping("/") // Base
-  public String main(Model model) {
-    return "Administrador/Login"; // Nombre del archivo jsp
-  }
+	public AdminController() {
+		jwtUtil = new JwtUtil();
+		loginDao = new LoginDao();
+		tipoProductoDao = new TipoProductoDao();
+		productoDao = new ProductoDao();
+		vendedorDao = new VendedorDao();
+		ventaDao = new VentaDao();
+	}
 
-  /**
-   * M�todo solicitado por los formularios de los archivos .jsp
-   * <p>
-   * Este metodo es usado en la etiqueta form de la siguiente manera: modelAttribute="login"
-   * 
-   * @return
-   */
-  @ModelAttribute("login")
-  public Login setUpUserForm() {
-    return new Login();
-  }
+	@GetMapping("/") // Base
+	public String main(Model model) {
+		return "Administrador/Login"; // Nombre del archivo jsp
+	}
 
-  /**
-   * M�todo para autenticar al usuario al usuario.
-   * 
-   * @param login Objeto con los datos de autenticacion
-   * @param model Clase para enviar datos desde los servicios a los archivos .jsp
-   * @param request Objeto con los datos de sesion que por el instante es nulo.
-   * @return La pagina a donde fue redireccionado.
-   */
-  @PostMapping("/autenticar")
-  public String authenticateUser(@ModelAttribute("login") Login login, Model model,
-      HttpServletRequest request) {
+	/**
+	 * M�todo solicitado por los formularios de los archivos .jsp
+	 * <p>
+	 * Este metodo es usado en la etiqueta form de la siguiente manera:
+	 * modelAttribute="login"
+	 * 
+	 * @return
+	 */
+	@ModelAttribute("login")
+	public Login setUpUserForm() {
+		return new Login();
+	}
 
-    /*
-     * Consulto si los datos no vienen nulos
-     */
-    if (!StringUtils.isEmpty(login.getCorreoEmpresarial())
-        && !StringUtils.isEmpty(login.getContrasena())) {
-      // Consulto en base de datos si se encuentra ese correo y esa contrase�a
-      String resultado = loginDao.authenticate(login.getCorreoEmpresarial(), login.getContrasena());
+	/**
+	 * M�todo para autenticar al usuario al usuario.
+	 * 
+	 * @param login
+	 *            Objeto con los datos de autenticacion
+	 * @param model
+	 *            Clase para enviar datos desde los servicios a los archivos
+	 *            .jsp
+	 * @param request
+	 *            Objeto con los datos de sesion que por el instante es nulo.
+	 * @return La pagina a donde fue redireccionado.
+	 */
+	@PostMapping("/autenticar")
+	public String authenticateUser(@ModelAttribute("login") Login login, Model model, HttpServletRequest request) {
 
-      // Si el resultado no es vacio es por que si existe ese correo y esa contrase�a
-      if (!resultado.isEmpty()) {
+		/*
+		 * Consulto si los datos no vienen nulos
+		 */
+		if (!StringUtils.isEmpty(login.getCorreoEmpresarial()) && !StringUtils.isEmpty(login.getContrasena())) {
+			// Consulto en base de datos si se encuentra ese correo y esa
+			// contrase�a
+			String resultado = loginDao.authenticate(login.getCorreoEmpresarial(), login.getContrasena());
 
-        // Creo un Json Web Token para validar si la sesi�n esta activa
-        String jwt = jwtUtil.generateToken(resultado, login.getCorreoEmpresarial());
-     
-        // Guardo el JWT como atributo de sesi�n
-        request.getSession().setAttribute("token", jwt);
+			// Si el resultado no es vacio es por que si existe ese correo y esa
+			// contrase�a
+			if (!resultado.isEmpty()) {
 
-        // Guarda la sesion en el manejador de sesiones
-        sessionManager.guardarSession("SESSION:" + login.getCorreoEmpresarial(), jwt);
+				// Creo un Json Web Token para validar si la sesi�n esta
+				// activa
+				String jwt = jwtUtil.generateToken(resultado, login.getCorreoEmpresarial());
 
-        // Redirijo al index debido a que el usuario ya fue autenticado con exito
-        return "Administrador/IndexAdmin";
+				// Guardo el JWT como atributo de sesi�n
+				request.getSession().setAttribute("token", jwt);
 
-      } else {
+				// Guarda la sesion en el manejador de sesiones
+				sessionManager.guardarSession("SESSION:" + login.getCorreoEmpresarial(), jwt);
 
-        /**
-         * Guardo en una variable el mensaje de error indicando que el usuario o la contrase�a
-         * fueron incorrectos debido a que no se encuentran en la base de datos y asi pueda ser
-         * entendida por los archivos .JSP
-         */
-        model.addAttribute("wrong", "Usuario o contrase�a incorrectos.");
-      }
-      // Redirecciono al login debido a que la autenticaci�n fue incorrecta
-      return "Administrador/Login";
-    } else {
-      /**
-       * Guardo en una variable el mensaje de error indicando que el usuario o la contrase�a son
-       * nulos siendo estos datos son obligatorios, y asi pueda ser entendida por los archivos .JSP
-       */
-      model.addAttribute("wrong", "El usuario y la contrase�a no pueden ser nulos.");
-      // Redirecciono al login debido a que la autenticaci�n fue incorrecta
-      return "Administrador/Login";
-    }
-  }
+				// Cargo las cantidades
+				cargarRegistros(model);
+				
+				// Redirijo al index debido a que el usuario ya fue autenticado
+				// con exito
+				return "Administrador/IndexAdmin";
 
-  @GetMapping("/indexAdmin") // Base
-  public String indexAdmin(Model model) {
-    return "Administrador/IndexAdmin"; // Nombre del archivo jsp
-  }
+			} else {
 
-  @GetMapping("/logout")
-  private String getLogOut(String token, HttpServletRequest request) {
-    request.getSession().invalidate();
-    String correo = jwtUtil.parseToken(token);
-    sessionManager.eliminarSesion("SESSION:" + correo);
-    return "Administrador/Login"; // Nombre del archivo jsp
-  }
+				/**
+				 * Guardo en una variable el mensaje de error indicando que el
+				 * usuario o la contrase�a fueron incorrectos debido a que no
+				 * se encuentran en la base de datos y asi pueda ser entendida
+				 * por los archivos .JSP
+				 */
+				model.addAttribute("wrong", "Usuario o contrase�a incorrectos.");
+			}
+			// Redirecciono al login debido a que la autenticaci�n fue
+			// incorrecta
+			return "Administrador/Login";
+		} else {
+			/**
+			 * Guardo en una variable el mensaje de error indicando que el
+			 * usuario o la contrase�a son nulos siendo estos datos son
+			 * obligatorios, y asi pueda ser entendida por los archivos .JSP
+			 */
+			model.addAttribute("wrong", "El usuario y la contrase�a no pueden ser nulos.");
+			// Redirecciono al login debido a que la autenticaci�n fue
+			// incorrecta
+			return "Administrador/Login";
+		}
+	}
+
+	@GetMapping("/indexAdmin") // Base
+	public String indexAdmin(Model model) {
+
+		cargarRegistros(model);
+		return "Administrador/IndexAdmin"; // Nombre del archivo jsp
+	}
+
+	private void cargarRegistros(Model model) {
+		model.addAttribute("catidadTipoProductos", tipoProductoDao.getCantidadRegistros());
+		model.addAttribute("catidadProductos", productoDao.getCantidadRegistros());
+		model.addAttribute("catidadVendedores", vendedorDao.getCantidadRegistros());
+		model.addAttribute("catidadVentas", ventaDao.getCantidadRegistros());
+	}
+
+	@GetMapping("/logout")
+	private String getLogOut(String token, HttpServletRequest request) {
+		request.getSession().invalidate();
+		String correo = jwtUtil.parseToken(token);
+		sessionManager.eliminarSesion("SESSION:" + correo);
+		return "Administrador/Login"; // Nombre del archivo jsp
+	}
 
 }
