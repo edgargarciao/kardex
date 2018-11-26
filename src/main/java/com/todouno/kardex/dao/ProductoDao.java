@@ -120,13 +120,13 @@ public class ProductoDao {
         : "Error en el sistema. Por favor contacte al administrador.";
   }
 
-  public String eliminarTipoProducto(TipoProducto tipoProducto) {
+  public String eliminarProducto(Producto producto) {
     // Agrego los datos de la eliminación (nombreColumna/Valor)
     MapSqlParameterSource map = new MapSqlParameterSource();
-    map.addValue("codigo", tipoProducto.getCodigo());
+    map.addValue("codigo", producto.getCodigo());
 
     // Armar la sentencia de actualización debase de datos
-    String query = "DELETE FROM TIPOPRODUCTO WHERE codigo = :codigo";
+    String query = "DELETE FROM PRODUCTO WHERE codigo = :codigo";
 
     // Ejecutar la sentencia
     int result = 0;
@@ -135,7 +135,7 @@ public class ProductoDao {
     } catch (Exception e) {
       new Exception();
     }
-    // Si hubieron filas afectadas es por que si hubo registro, en caso contrario muestra el mensaje
+    // Si hubieron filas afectadas es por que si hubo eliminacion, en caso contrario muestra el mensaje
     // de error.
     return (result == 1) ? "Eliminacion exitosa"
         : "Error en el sistema. Por favor contacte al administrador.";

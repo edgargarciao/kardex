@@ -1,6 +1,8 @@
 package com.todouno.kardex.dto;
 
-import java.util.Date;
+
+import java.sql.Date;
+import org.springframework.util.StringUtils;
 
 public class Vendedor {
 
@@ -57,6 +59,15 @@ public class Vendedor {
 
   public void setTelefono(String telefono) {
     this.telefono = telefono;
+  }
+
+  public boolean isValidoParaRegistrar() {
+
+    return (!StringUtils.isEmpty(this.nombres) && !StringUtils.isEmpty(this.documento) && !StringUtils.isEmpty(this.correo) && !StringUtils.isEmpty(this.fechaDeNacimiento) && !StringUtils.isEmpty(this.telefono));
+  }
+
+  public boolean isValidoParaActualizar() {
+    return (codigo != 0 && !StringUtils.isEmpty(this.documento) && !StringUtils.isEmpty(this.correo) && !StringUtils.isEmpty(this.fechaDeNacimiento) && !StringUtils.isEmpty(this.telefono));
   }
 
 }

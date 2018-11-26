@@ -34,10 +34,8 @@
 							<ol class="breadcrumb text-right">
 								<li><a href="${contextPath}/indexAdmin">Panel de
 										control</a></li>
-								<li><a href="${contextPath}/tipoProductos">Tipos de
-										producto </a></li>
-								<li class="active"><a href="#"> Eliminar tipo de
-										producto</a><</li>
+								<li><a href="${contextPath}/productos">Productos </a></li>
+								<li class="active"><a href="#"> Eliminar producto</a></li>
 							</ol>
 						</div>
 					</div>
@@ -59,7 +57,7 @@
                     	<div class="card">
                     		<!-- Titulo de la ventana -->
                         	<div class="card-header">
-                            	<strong class="card-title">Eliminar tipo de producto</strong>
+                            	<strong class="card-title">Eliminar producto</strong>
                         	</div>
                         	<div class="card-body">
                         	                  
@@ -74,13 +72,13 @@
 							    </c:if>              
                         	                                               	
                         		<!-- Formulario -->
-                        		<form:form id="formElimTipoProducto" action="borrarTipoProducto" method="post" modelAttribute="tipoProducto">
+                        		<form:form id="formElimProducto" action="borrarProducto" method="post" modelAttribute="producto">
                         		                 			
-                        		    <form:hidden id="codigo" path="codigo" class="form-control" aria-invalid="false" required = "true" value="${tipoProducto.codigo}"/>                            		
+                        		    <form:hidden id="codigo" path="codigo" class="form-control" aria-invalid="false" required = "true" value="${producto.codigo}"/>                            		
                             		
                             		<!-- Campo para digitar el nombre -->
                                 	<div class="form-group">
-                                    	<label for="text-input" class=" form-control-label">¿Estás seguro de eliminar el tipo de producto "${tipoProducto.nombre}"?</label>                                		
+                                    	<label for="text-input" class=" form-control-label">¿Estás seguro de eliminar el producto "${producto.nombre}"?</label>                                		
                                 	</div> 
                                 	
                                 	<!-- Boton para Eliminar los datos -->

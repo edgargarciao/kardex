@@ -25,6 +25,7 @@
 
 	<div id="right-panel" class="right-panel">
 
+
 		<!-- Header-->
 		<header id="header" class="header">
 
@@ -37,19 +38,19 @@
 							<ol class="breadcrumb text-right">
 								<li><a href="${contextPath}/indexAdmin">Panel de
 										control</a></li>
-								<li><a href="${contextPath}/productos">Productos </a></li>
-								<li class="active"><a href="#"> Actualizar producto</a><</li>
+								<li><a href="${contextPath}/ventas">Ventas </a></li>
+								<li class="active"><a href="#"> Registrar venta</a></li>
 							</ol>
 						</div>
 					</div>
 				</div>
 				<%@ include file="../General/Configuracion.jsp"%>
-
 			</div>
 
 		</header>
 		<!-- /header -->
 		<!-- Header-->
+
 
 		<!-- Contenedor del formulario -->
 		<div class="content mt-3">
@@ -60,7 +61,7 @@
 						<div class="card">
 							<!-- Titulo de la ventana -->
 							<div class="card-header">
-								<strong class="card-title">Actualizar tipo de producto</strong>
+								<strong class="card-title">Registrar venta</strong>
 							</div>
 							<div class="card-body">
 								<!-- Si hubo un error en el registro muestra el mensaje-->
@@ -76,46 +77,54 @@
 								</c:if>
 
 								<!-- Formulario -->
-								<form:form id="formActProducto" action="editarProducto"
-									method="post" modelAttribute="producto">
+								<form:form id="formVenta" action="guardarVenta"
+									method="post" modelAttribute="venta" enctype="multipart/form-data">
+									
 
-									<form:hidden id="codigo" path="codigo" class="form-control"
-										aria-invalid="false" required="true"
-										value="${producto.codigo}" />
-
+									<!-- Campo para digitar el documento -->
 									<div class="form-group">
-										<form:select path="tipoProducto.codigo" id="idTipoProducto"
-											class="form-control">
-											<form:option value="${idTipoProductoSeleccionado}"
-												label="${nombreTipoProductoSeleccionado}" />
-											<form:options items="${tipoProductos}" />
-										</form:select>
-									</div>
-
+										<label for="text-input" class=" form-control-label">Documento</label>
+										<form:input id="documento" path="documento"
+											class="form-control" placeholder="1098789234"
+											aria-invalid="false" required="true" />
+									</div>									
+									
 									<!-- Campo para digitar el nombre -->
 									<div class="form-group">
-										<label for="text-input" class=" form-control-label">Nombre</label>
-										<form:input id="nombre" path="nombre" class="form-control"
-											aria-invalid="false" required="true"
-											value="${producto.nombre}" />
+										<label for="text-input" class=" form-control-label">Nombres</label>
+										<form:input id="nombres" path="nombres" class="form-control"
+											placeholder="Juan Jose Perez Sosa" aria-invalid="false"
+											required="true" />
 									</div>
-									<!-- Campo para digitar la cantidad -->
+									
+									<!-- Campo para digitar el telefono -->
 									<div class="form-group">
-										<label for="text-input" class=" form-control-label">Precio</label>
-										<form:input path="precio" id="precio" class="form-control"
-											type="number" min="0" step="1" required="true"
-											value="${producto.precio}" />
-									</div>
-									<!-- Campo para digitar la cantidad -->
-									<div class="form-group">
-										<label for="text-input" class=" form-control-label">Cantidad</label>
-										<form:input path="cantidad" id="cantidad" class="form-control"
-											type="number" min="0" step="1" required="true"
-											value="${producto.cantidad}" />
+										<label for="text-input" class=" form-control-label">Teléfono</label>
+										<form:input id="telefono" path="telefono" class="form-control"
+											placeholder="3208798887" aria-invalid="false"
+											required="true" />
 									</div>
 
-									<!-- Boton para actualizar los datos -->
-									<button type="submit" class="btn btn-success">Actualizar</button>
+									<!-- Campo para digitar el correo -->
+									<div class="form-group">
+										<label for="text-input" class=" form-control-label">Correo
+											electrónico</label>
+										<form:input id="correo" path="correo" class="form-control"
+											placeholder="Juan.Jose.Perez.Sosa@gmail.com" aria-invalid="false"
+											required="true" type="email" />
+									</div>
+
+									<!-- Campo para digitar el fecha de nacimiento -->
+									<div class="form-group">
+										<label for="text-input" class=" form-control-label">Fecha
+											de nacimiento</label>
+										<form:input type="date" id="fechaDeNacimiento" path="fechaDeNacimiento"
+											class="form-control" aria-invalid="false" required="true" />
+									</div>
+
+
+									<!-- Boton para registrar los datos -->
+									<button type="submit" class="btn btn-success">Registrar</button>
 								</form:form>
 							</div>
 						</div>
@@ -135,6 +144,7 @@
 
 	<!-- Carga de los archivos Javascript -->
 	<%@ include file="../General/scripts.jsp"%>
+
 
 </body>
 </html>

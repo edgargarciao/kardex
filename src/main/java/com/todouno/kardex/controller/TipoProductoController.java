@@ -127,11 +127,11 @@ public class TipoProductoController {
         return "Administrador/TipoProducto/TipoProductos"; // Nombre del archivo jsp
       } else {
         model.addAttribute("wrong", mensaje);
-        return "Administrador/TipoProducto/ActualizarTipoProductos";
+        return actualizarTipoProducto(tipoProducto.getCodigo(), model);
       }
     } else {
       model.addAttribute("wrong", "Debes llenar todos los campos.");
-      return "Administrador/TipoProducto/ActualizarTipoProductos";
+      return actualizarTipoProducto(tipoProducto.getCodigo(), model);
     }
   }
 

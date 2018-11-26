@@ -36,10 +36,10 @@
 				</a></li>
 				<li><a href="${contextPath}/productos"> <i class="menu-icon ti-list-ol"></i>Productos
 				</a></li>
-				<li><a href="${contextPath}/categorias"> <i
+				<li><a href="${contextPath}/vendedores"> <i
 						class="menu-icon ti-list"></i>Vendedores
 				</a></li>
-				<li><a href="${contextPath}/contenidos"> <i class="menu-icon fa fa-edit"></i>Ventas
+				<li><a href="${contextPath}/ventas"> <i class="menu-icon fa fa-edit"></i>Ventas
 				</a></li>				
 			</ul>
 		</div>

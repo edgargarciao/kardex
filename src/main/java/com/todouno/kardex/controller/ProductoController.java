@@ -168,23 +168,23 @@ public class ProductoController {
   }
 
   /**
-   * Servicio que permite eliminar un tipo de producto.
+   * Servicio que permite eliminar un producto.
    * 
    * @param tipoProducto Objeto con la información a eliminar.
    * @param model Modelo con la información necesaria para transportar a los archivos .JSP
    * @return La página a donde debe redireccionar después de la acción.
    */
   @PostMapping(value = "/borrarProducto")
-  public String borrarTipoProducto(@ModelAttribute("tipoProducto") TipoProducto tipoProducto, Model model) {
+  public String borrarTipoProducto(@ModelAttribute("producto") Producto producto, Model model) {
     
-      String mensaje = productoDao.eliminarTipoProducto(tipoProducto);
+      String mensaje = productoDao.eliminarProducto(producto);
       if (mensaje.equals("Eliminacion exitosa")) {
-        model.addAttribute("result", "Tipo de producto eliminado con éxito.");
+        model.addAttribute("result", "Producto eliminado con éxito.");
         model.addAttribute("productos", productoDao.getProductos());
-        return "Administrador/Producto/Productos"; // Nombre del archivo jsp   
+        return "Administrador/Producto/Productos"; // Nombre del archivo jsp
       } else {
         model.addAttribute("wrong", mensaje);
-        return "Administrador/TipoProducto/EliminarTipoProductos";
+        return eliminarProducto(producto.getCodigo(), model);
       }
   }
 }

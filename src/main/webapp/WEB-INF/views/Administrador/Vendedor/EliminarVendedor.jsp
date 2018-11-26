@@ -22,28 +22,31 @@
 
     <div id="right-panel" class="right-panel">
 
-        <!-- Header-->
-        <header id="header" class="header">
+		<!-- Header-->
+		<header id="header" class="header">
 
-            <div class="header-menu">
-            	<div class="col-sm-7">
-                        <a id="menuToggle" class="menutoggle pull-left"><i class="fa fa fa-tasks"></i></a>
-                        <div class="page-header float-left">
-                        	<div class="page-title">
-                                <ol class="breadcrumb text-right">
-                                	<li><a href="${contextPath}/indexAdmin">Panel de control</a></li>
-                                    <li><a href="${contextPath}/actividades">Actividades / </li>
-                                    <li class="active"><a href="#"> Eliminar Actividad</li>
-                            	</ol>
-                            </div>
-						</div>    
-                </div>
-               	<!-- Area en donde se encuentra la foto del usuario y la barra de opciones -->
+			<div class="header-menu">
+				<div class="col-sm-9">
+					<a id="menuToggle" class="menutoggle pull-left"><i
+						class="fa fa fa-tasks"></i></a>
+					<div class="page-header float-left">
+						<div class="page-title">
+							<ol class="breadcrumb text-right">
+								<li><a href="${contextPath}/indexAdmin">Panel de
+										control</a></li>
+								<li><a href="${contextPath}/vendedores">Vendedores </a></li>
+								<li class="active"><a href="#"> Eliminar vendedor</a></li>
+							</ol>
+						</div>
+					</div>
+				</div>
 				<%@ include file="../General/Configuracion.jsp"%>
-            </div>
+				
+			</div>
 
-        </header><!-- /header -->
-        <!-- Header-->
+		</header>
+		<!-- /header -->
+
 		
 		<!-- Contenedor del formulario -->
         <div class="content mt-3">
@@ -54,7 +57,7 @@
                     	<div class="card">
                     		<!-- Titulo de la ventana -->
                         	<div class="card-header">
-                            	<strong class="card-title">Eliminar Actividad</strong>
+                            	<strong class="card-title">Eliminar vendedor</strong>
                         	</div>
                         	<div class="card-body">
                         	                  
@@ -69,13 +72,13 @@
 							    </c:if>              
                         	                                               	
                         		<!-- Formulario -->
-                        		<form:form id="formActividad" action="borrarActividad" method="post" modelAttribute="actividad">
+                        		<form:form id="formElimVendedor" action="borrarVendedor" method="post" modelAttribute="vendedor">
                         		                 			
-                        		    <form:hidden id="id" path="id" class="form-control" aria-invalid="false" required = "true" value="${actividad.id}"/>                            		
+                        		    <form:hidden id="codigo" path="codigo" class="form-control" aria-invalid="false" required = "true" value="${vendedor.codigo}"/>                            		
                             		
                             		<!-- Campo para digitar el nombre -->
                                 	<div class="form-group">
-                                    	<label for="text-input" class=" form-control-label">¿Estás seguro de eliminar la actividad "${actividad.nombre}"?</label>                                		
+                                    	<label for="text-input" class=" form-control-label">¿Estás seguro de eliminar al vendedor "${vendedor.nombres}"?</label>                                		
                                 	</div> 
                                 	
                                 	<!-- Boton para Eliminar los datos -->
