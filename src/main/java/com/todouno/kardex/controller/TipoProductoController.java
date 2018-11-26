@@ -171,7 +171,7 @@ public class TipoProductoController {
         return "Administrador/TipoProducto/TipoProductos"; // Nombre del archivo jsp        
       } else {
         model.addAttribute("wrong", mensaje);
-        return "Administrador/TipoProducto/EliminarTipoProductos";
+        return eliminarTipoProducto(tipoProducto.getCodigo(), model);
       }
   }
 }
