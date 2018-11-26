@@ -135,11 +135,5 @@
 	<!-- Carga de los archivos Javascript -->
 	<%@ include file="../General/scripts.jsp"%>
 
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$('#bootstrap-data-table-export').DataTable();
-		});
-	</script>
-
 </body>
 </html>

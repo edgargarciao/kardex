@@ -110,7 +110,7 @@ public class AdminController {
 				 * se encuentran en la base de datos y asi pueda ser entendida
 				 * por los archivos .JSP
 				 */
-				model.addAttribute("wrong", "Usuario o contraseï¿½a incorrectos.");
+				model.addAttribute("wrong", "Usuario o contraseña incorrectos.");
 			}
 			// Redirecciono al login debido a que la autenticaciï¿½n fue
 			// incorrecta
@@ -121,7 +121,7 @@ public class AdminController {
 			 * usuario o la contraseï¿½a son nulos siendo estos datos son
 			 * obligatorios, y asi pueda ser entendida por los archivos .JSP
 			 */
-			model.addAttribute("wrong", "El usuario y la contraseï¿½a no pueden ser nulos.");
+			model.addAttribute("wrong", "El usuario y la contraseña no pueden ser nulos.");
 			// Redirecciono al login debido a que la autenticaciï¿½n fue
 			// incorrecta
 			return "Administrador/Login";
