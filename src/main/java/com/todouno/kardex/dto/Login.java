@@ -1,28 +1,28 @@
 package com.todouno.kardex.dto;
 
 public class Login {
-	
-	private String correoEmpresarial;
-	private String contrasena;
 
-	public String getContrasena() {
-		return contrasena;
-	}
+  private String correoEmpresarial;
+  private String contrasena;
 
-
-	public void setContrasena(String contrasena) {
-		this.contrasena = contrasena;
-	}
+  public String getContrasena() {
+    return contrasena;
+  }
 
 
-	public String getCorreoEmpresarial() {
-		return correoEmpresarial;
-	}
+  public void setContrasena(String contrasena) {
+    this.contrasena = contrasena;
+  }
 
 
-	public void setCorreoEmpresarial(String correoEmpresarial) {
-		this.correoEmpresarial = correoEmpresarial;
-	}
+  public String getCorreoEmpresarial() {
+    return correoEmpresarial;
+  }
+
+
+  public void setCorreoEmpresarial(String correoEmpresarial) {
+    this.correoEmpresarial = correoEmpresarial;
+  }
 
 
 }

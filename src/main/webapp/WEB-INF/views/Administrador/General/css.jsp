@@ -6,8 +6,8 @@
 
 
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Admin-Ufps</title>
-<meta name="description" content="AdminUFPS">
+<title>Admin-Kardex</title>
+<meta name="description" content="AdminKardex">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="apple-touch-icon" href="apple-icon.png">
 <link rel="shortcut icon" href="resources/images/favicon.ico">

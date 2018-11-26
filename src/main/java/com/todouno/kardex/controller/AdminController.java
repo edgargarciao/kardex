@@ -1,14 +1,13 @@
 package com.todouno.kardex.controller;
 
 import javax.servlet.http.HttpServletRequest;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-
 import com.todouno.kardex.config.SessionManager;
 import com.todouno.kardex.dao.LoginDao;
 import com.todouno.kardex.dto.Login;
@@ -17,94 +16,102 @@ import com.todouno.kardex.util.JwtUtil;
 @Controller
 public class AdminController {
 
-	private JwtUtil jwtUtil;
-	private SessionManager sessionManager;
-	private LoginDao loginDao;
-	
-	public AdminController() {
-		jwtUtil = new JwtUtil();
-		sessionManager = new SessionManager(); 		
-		loginDao = new LoginDao();
-	}
-	
-	@GetMapping("/") // Base
-	public String main(Model model) {
-		return "Administrador/Login"; // Nombre del archivo jsp
-	}
+  @Autowired
+  private SessionManager sessionManager;
+  
+  private JwtUtil jwtUtil;
+  private LoginDao loginDao;
 
-	/**
-	 * Método solicitado por los formularios de los archivos .jsp
-	 * <p>
-	 * Este metodo es usado en la etiqueta form de la siguiente manera:
-	 * modelAttribute="login"
-	 * 
-	 * @return
-	 */
-	@ModelAttribute("login")
-	public Login setUpUserForm() {
-		return new Login();
-	}
-	
-	/**
-	   * Método para autenticar al usuario al usuario.
-	   * 
-	   * @param login Objeto con los datos de autenticacion
-	   * @param model Clase para enviar datos desde los servicios a los archivos .jsp
-	   * @param request Objeto con los datos de sesion que por el instante es nulo.
-	   * @return La pagina a donde fue redireccionado.
-	   */
-	  @PostMapping("/autenticar")
-	  public String authenticateUser(@ModelAttribute("login") Login login, Model model,
-	      HttpServletRequest request) {
+  public AdminController() {
+    jwtUtil = new JwtUtil();
+    loginDao = new LoginDao();
+  }
 
-	    /*
-	     * Consulto si los datos no vienen nulos
-	     */
-	    if (!StringUtils.isEmpty(login.getCorreoEmpresarial())
-	        && !StringUtils.isEmpty(login.getContrasena())) {
-	      // Consulto en base de datos si se encuentra ese correo y esa contraseña
-	      String resultado =
-	          loginDao.authenticate(login.getCorreoEmpresarial(), login.getContrasena());
+  @GetMapping("/") // Base
+  public String main(Model model) {
+    return "Administrador/Login"; // Nombre del archivo jsp
+  }
 
-	      // Si el resultado no es vacio es por que si existe ese correo y esa contraseña
-	      if (!resultado.isEmpty()) {
+  /**
+   * Mï¿½todo solicitado por los formularios de los archivos .jsp
+   * <p>
+   * Este metodo es usado en la etiqueta form de la siguiente manera: modelAttribute="login"
+   * 
+   * @return
+   */
+  @ModelAttribute("login")
+  public Login setUpUserForm() {
+    return new Login();
+  }
 
-	        // Creo un Json Web Token para validar si la sesión esta activa
-	        String jwt = jwtUtil.generateToken(resultado, login.getCorreoEmpresarial());
+  /**
+   * Mï¿½todo para autenticar al usuario al usuario.
+   * 
+   * @param login Objeto con los datos de autenticacion
+   * @param model Clase para enviar datos desde los servicios a los archivos .jsp
+   * @param request Objeto con los datos de sesion que por el instante es nulo.
+   * @return La pagina a donde fue redireccionado.
+   */
+  @PostMapping("/autenticar")
+  public String authenticateUser(@ModelAttribute("login") Login login, Model model,
+      HttpServletRequest request) {
 
-	        // Guardo el JWT como atributo de sesión
-	        request.getSession().setAttribute("token", jwt);
+    /*
+     * Consulto si los datos no vienen nulos
+     */
+    if (!StringUtils.isEmpty(login.getCorreoEmpresarial())
+        && !StringUtils.isEmpty(login.getContrasena())) {
+      // Consulto en base de datos si se encuentra ese correo y esa contraseï¿½a
+      String resultado = loginDao.authenticate(login.getCorreoEmpresarial(), login.getContrasena());
 
-	        // Guarda la sesion en el manejador de sesiones
-	        sessionManager.guardarSession("SESSION:" + login.getCorreoEmpresarial(), jwt);	      
+      // Si el resultado no es vacio es por que si existe ese correo y esa contraseï¿½a
+      if (!resultado.isEmpty()) {
 
-	        // Redirijo al index debido a que el usuario ya fue autenticado con exito
-	        return "Administrador/IndexAdmin";
+        // Creo un Json Web Token para validar si la sesiï¿½n esta activa
+        String jwt = jwtUtil.generateToken(resultado, login.getCorreoEmpresarial());
+     
+        // Guardo el JWT como atributo de sesiï¿½n
+        request.getSession().setAttribute("token", jwt);
 
-	      } else {
+        // Guarda la sesion en el manejador de sesiones
+        sessionManager.guardarSession("SESSION:" + login.getCorreoEmpresarial(), jwt);
 
-	        /**
-	         * Guardo en una variable el mensaje de error indicando que el usuario o la contraseña
-	         * fueron incorrectos debido a que no se encuentran en la base de datos y asi pueda ser
-	         * entendida por los archivos .JSP
-	         */
-	        model.addAttribute("wrong", "Usuario o contraseña incorrectos.");
-	      }
-	      // Redirecciono al login debido a que la autenticación fue incorrecta
-	      return "Administrador/Login";
-	    } else {
-	      /**
-	       * Guardo en una variable el mensaje de error indicando que el usuario o la contraseña son
-	       * nulos siendo estos datos son obligatorios, y asi pueda ser entendida por los archivos .JSP
-	       */
-	      model.addAttribute("wrong", "El usuario y la contraseña no pueden ser nulos.");
-	      // Redirecciono al login debido a que la autenticación fue incorrecta
-	      return "Administrador/Login";
-	    }
-	  }
+        // Redirijo al index debido a que el usuario ya fue autenticado con exito
+        return "Administrador/IndexAdmin";
 
-	  @GetMapping("/indexAdmin") // Base
-	  public String indexAdmin(Model model) {
-	    return "Administrador/IndexAdmin"; // Nombre del archivo jsp
-	  }
+      } else {
+
+        /**
+         * Guardo en una variable el mensaje de error indicando que el usuario o la contraseï¿½a
+         * fueron incorrectos debido a que no se encuentran en la base de datos y asi pueda ser
+         * entendida por los archivos .JSP
+         */
+        model.addAttribute("wrong", "Usuario o contraseï¿½a incorrectos.");
+      }
+      // Redirecciono al login debido a que la autenticaciï¿½n fue incorrecta
+      return "Administrador/Login";
+    } else {
+      /**
+       * Guardo en una variable el mensaje de error indicando que el usuario o la contraseï¿½a son
+       * nulos siendo estos datos son obligatorios, y asi pueda ser entendida por los archivos .JSP
+       */
+      model.addAttribute("wrong", "El usuario y la contraseï¿½a no pueden ser nulos.");
+      // Redirecciono al login debido a que la autenticaciï¿½n fue incorrecta
+      return "Administrador/Login";
+    }
+  }
+
+  @GetMapping("/indexAdmin") // Base
+  public String indexAdmin(Model model) {
+    return "Administrador/IndexAdmin"; // Nombre del archivo jsp
+  }
+
+  @GetMapping("/logout")
+  private String getLogOut(String token, HttpServletRequest request) {
+    request.getSession().invalidate();
+    String correo = jwtUtil.parseToken(token);
+    sessionManager.eliminarSesion("SESSION:" + correo);
+    return "Administrador/Login"; // Nombre del archivo jsp
+  }
+
 }

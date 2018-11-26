@@ -2,7 +2,7 @@
 <!-- 
 		Se crea una variable con la url actual 
 		debido a que esta puede cambiar segun la 
-		direccion de despligue EJE= "https://graduados.ufps.edu.co"
+		direccion de despligue EJE= "https://todouno.kardex.com"
 	-->
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
@@ -26,20 +26,21 @@
 
 		<div id="main-menu" class="main-menu collapse navbar-collapse ">
 			<ul class="nav navbar-nav">
-				<li><a href="${contextPath}/indexAdmin"> <i
+				<li><a href="indexAdmin"> <i
 						class="menu-icon fa fa-dashboard"></i>Panel de control
 				</a></li>
 				<h3 class="menu-title">Negocio</h3>
 				<!-- /.menu-title -->
+				<li><a href="${contextPath}/tipoProductos"> <i
+						class="menu-icon ti-list"></i>Tipos de producto
+				</a></li>
+				<li><a href="${contextPath}/productos"> <i class="menu-icon ti-list-ol"></i>Productos
+				</a></li>
 				<li><a href="${contextPath}/categorias"> <i
 						class="menu-icon ti-list"></i>Vendedores
 				</a></li>
-				<li><a href="${contextPath}/subcategorias"> <i class="menu-icon ti-list-ol"></i>Productos
-				</a></li>
 				<li><a href="${contextPath}/contenidos"> <i class="menu-icon fa fa-edit"></i>Ventas
-				</a></li>
-				
-
+				</a></li>				
 			</ul>
 		</div>
 		<!-- /.navbar-collapse -->

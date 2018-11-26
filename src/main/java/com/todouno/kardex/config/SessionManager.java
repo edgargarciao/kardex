@@ -7,14 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.todouno.kardex.util.JwtUtil;
 
-  
 
 
 /**
  * Clase que permite manejar las sesiones del sistema.
+ * 
  * @author edgar
  *
  */
@@ -33,13 +32,14 @@ public class SessionManager implements HandlerInterceptor {
 
   /**
    * Metodo que guarda una sesion en el sistema
+   * 
    * @param sesion
    * @param token
    */
   public void guardarSession(String sesion, String token) {
     sesiones.put(sesion, token);
   }
-  
+
   public void eliminarSesion(String sesion) {
     sesiones.remove(sesion);
   }
@@ -49,34 +49,32 @@ public class SessionManager implements HandlerInterceptor {
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
       throws Exception {
     
-   /* if(request.getSession().getAttribute("token") == null)
-    {
+    if (request.getSession().getAttribute("token") == null) {
       response.setStatus(HttpStatus.UNAUTHORIZED.value());
-      response.sendRedirect(Constantes.RUTA+"/admin");
+      response.sendRedirect(request.getContextPath());
       return false;
-    }*/
-    //else {
+    }
+    else {
       // Se extrae el token de sesion
       String token = request.getSession().getAttribute("token").toString();
-      
+
       // Se valida el token
       boolean permission = validarToken(token);
-      
+
       // Si el token es valido se permite la continuidad
       if (permission) {
         return true;
-      // Si el token no es valido se envia un mensaje de no autorizado. 
+        // Si el token no es valido se envia un mensaje de no autorizado.
       } else {
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        //response.sendRedirect(Constantes.SERVER+Constantes.RUTA+"/admin");
+        response.sendRedirect(request.getContextPath());
         return false;
         // Above code will send a 401 with no response body.
         // If you need a 401 view, do a redirect instead of
         // returning false.
         // response.sendRedirect("/401"); // assuming you have a handler mapping for 401
-  
       }
-    //}
+    }
   }
 
   private boolean validarToken(String token) {
@@ -85,7 +83,7 @@ public class SessionManager implements HandlerInterceptor {
         || sesiones.get("SESSION:" + correo) == null) {
       return false;
     }
-    
+
     return true;
   }
 
