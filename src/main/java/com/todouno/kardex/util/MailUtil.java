@@ -14,9 +14,9 @@ public class MailUtil {
   private String PASSWORD;
 
   public MailUtil() {
-    USER_NAME = "edgar.yesid.garcia.ortiz@gmail.com"; // GMail user name (just the part before
+    USER_NAME = "testtodouno@gmail.com"; // GMail user name (just the part before
                                                       // "@gmail.com")
-    PASSWORD = "94100209440"; // GMail password
+    PASSWORD = "Todouno1234"; // GMail password
   }
 
   public String sendFromGMail(String[] to, String subject, String body) {
@@ -66,7 +66,7 @@ public class MailUtil {
 
   public static void main(String[] args) {
     MailUtil mailUtil = new MailUtil();
-    mailUtil.sendFromGMail(new String[] {"edgar.yesid.garcia.ortiz@gmail.com"}, "sdsdsd",
+    mailUtil.sendFromGMail(new String[] {"eygarcia@softcaribbean.com"}, "sdsdsd",
         "<p>asasa</p>");
   }
 }

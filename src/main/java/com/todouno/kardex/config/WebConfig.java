@@ -73,7 +73,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
   public void addInterceptors(InterceptorRegistry registry) {
     // Mapea la clase para la seguridad
     registry.addInterceptor(getSessionManager()).addPathPatterns("/**").excludePathPatterns(
-        "/resources/**", "/admin", "/autenticar", "/recordar", "/recordarContrase�a",
+        "/resources/**", "/admin", "/autenticar", "/recordar", "/recordarContrasena",
         "/servicios/*", "/");
   }
 

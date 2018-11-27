@@ -36,7 +36,7 @@ public class DataMgr {
     executeDml("INSERT INTO  TIPOPRODUCTO(nombre,descripcion) VALUES('Camisetas','En esta seccion se ingresan productos como: Camiseta super man, Camiseta Batman, entre otros')");
     executeDml("INSERT INTO  TIPOPRODUCTO(nombre,descripcion) VALUES('Vasos','En esta seccion se ingresan productos como: Vaso Holk, Vaso mujer maravilla, entre otros')");
     executeDml("INSERT INTO  TIPOPRODUCTO(nombre,descripcion) VALUES('Comics','En esta seccion se ingresan productos como: Comics archie, Comics los gemelos fantasticos, entre otros')");
-    executeDml("INSERT INTO  TIPOPRODUCTO(nombre,descripcion) VALUES('Jueguetes','En esta seccion se ingresan productos como: Muñeco Holk, Mucheco superman, entre otros')");
+    executeDml("INSERT INTO  TIPOPRODUCTO(nombre,descripcion) VALUES('Jueguetes','En esta seccion se ingresan productos como: Figura Holk, Figura superman, entre otros')");
     executeDml("INSERT INTO  TIPOPRODUCTO(nombre,descripcion) VALUES('Accesorios','En esta seccion se ingresan productos como: Manilla Thor, Cadena superman, entre otros')");
     
     executeDml("CREATE TABLE IF NOT EXISTS PRODUCTO ( codigo int auto_increment primary key NOT NULL, nombre VARCHAR(1000) NOT NULL , stock int  NOT NULL ,precio int  NOT NULL , tipoProducto int NOT NULL, foreign key (tipoProducto) references TIPOPRODUCTO(codigo) ) ");
@@ -53,6 +53,7 @@ public class DataMgr {
     executeDml("CREATE TABLE IF NOT EXISTS DETALLE ( codigo int auto_increment primary key NOT NULL, cantidad VARCHAR(1000) NOT NULL , producto int NOT NULL, factura int NOT NULL, foreign key (producto) references PRODUCTO(codigo), foreign key (factura) references FACTURA(codigo) ) ");
     executeDml("CREATE TABLE IF NOT EXISTS USUARIO ( correo VARCHAR(1000) NOT NULL primary key, contrasena VARCHAR(1000) NOT NULL) ");
     executeDml("INSERT INTO  USUARIO(correo,contrasena) VALUES('eygarcia@softcaribbean.com','1234')");
+    executeDml("INSERT INTO  USUARIO(correo,contrasena) VALUES('smunevar@softcaribbean.com','1234')");
   }
  
   

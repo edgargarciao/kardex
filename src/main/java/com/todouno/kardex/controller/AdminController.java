@@ -1,6 +1,5 @@
 package com.todouno.kardex.controller;
 
-import javax.activation.ActivationDataFlavor;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,9 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import com.todouno.kardex.config.SessionManager;
+import com.todouno.kardex.constantes.Mensajes;
 import com.todouno.kardex.dao.LoginDao;
 import com.todouno.kardex.dao.ProductoDao;
 import com.todouno.kardex.dao.TipoProductoDao;
+import com.todouno.kardex.dao.UsuarioDao;
 import com.todouno.kardex.dao.VendedorDao;
 import com.todouno.kardex.dao.VentaDao;
 import com.todouno.kardex.dto.Login;
@@ -21,133 +22,155 @@ import com.todouno.kardex.util.JwtUtil;
 @Controller
 public class AdminController {
 
-	@Autowired
-	private SessionManager sessionManager;
+  @Autowired
+  private SessionManager sessionManager;
 
-	private JwtUtil jwtUtil;
-	private LoginDao loginDao;
-	private TipoProductoDao tipoProductoDao;
-	private ProductoDao productoDao;
-	private VendedorDao vendedorDao;
-	private VentaDao ventaDao;
+  private JwtUtil jwtUtil;
+  private LoginDao loginDao;
+  private TipoProductoDao tipoProductoDao;
+  private ProductoDao productoDao;
+  private VendedorDao vendedorDao;
+  private VentaDao ventaDao;
+  private UsuarioDao usuarioDao;
 
-	public AdminController() {
-		jwtUtil = new JwtUtil();
-		loginDao = new LoginDao();
-		tipoProductoDao = new TipoProductoDao();
-		productoDao = new ProductoDao();
-		vendedorDao = new VendedorDao();
-		ventaDao = new VentaDao();
-	}
+  public AdminController() {
+    jwtUtil = new JwtUtil();
+    loginDao = new LoginDao();
+    tipoProductoDao = new TipoProductoDao();
+    productoDao = new ProductoDao();
+    vendedorDao = new VendedorDao();
+    ventaDao = new VentaDao();
+    usuarioDao = new UsuarioDao();
+  }
 
-	@GetMapping("/") // Base
-	public String main(Model model) {
-		return "Administrador/Login"; // Nombre del archivo jsp
-	}
+  @GetMapping("/") // Base
+  public String main(Model model) {
+    return "Administrador/Login"; // Nombre del archivo jsp
+  }
 
-	/**
-	 * M�todo solicitado por los formularios de los archivos .jsp
-	 * <p>
-	 * Este metodo es usado en la etiqueta form de la siguiente manera:
-	 * modelAttribute="login"
-	 * 
-	 * @return
-	 */
-	@ModelAttribute("login")
-	public Login setUpUserForm() {
-		return new Login();
-	}
+  /**
+   * M�todo solicitado por los formularios de los archivos .jsp
+   * <p>
+   * Este metodo es usado en la etiqueta form de la siguiente manera: modelAttribute="login"
+   * 
+   * @return
+   */
+  @ModelAttribute("login")
+  public Login setUpUserForm() {
+    return new Login();
+  }
 
-	/**
-	 * M�todo para autenticar al usuario al usuario.
-	 * 
-	 * @param login
-	 *            Objeto con los datos de autenticacion
-	 * @param model
-	 *            Clase para enviar datos desde los servicios a los archivos
-	 *            .jsp
-	 * @param request
-	 *            Objeto con los datos de sesion que por el instante es nulo.
-	 * @return La pagina a donde fue redireccionado.
-	 */
-	@PostMapping("/autenticar")
-	public String authenticateUser(@ModelAttribute("login") Login login, Model model, HttpServletRequest request) {
+  /**
+   * M�todo para autenticar al usuario al usuario.
+   * 
+   * @param login Objeto con los datos de autenticacion
+   * @param model Clase para enviar datos desde los servicios a los archivos .jsp
+   * @param request Objeto con los datos de sesion que por el instante es nulo.
+   * @return La pagina a donde fue redireccionado.
+   */
+  @PostMapping("/autenticar")
+  public String authenticateUser(@ModelAttribute("login") Login login, Model model,
+      HttpServletRequest request) {
 
-		/*
-		 * Consulto si los datos no vienen nulos
-		 */
-		if (!StringUtils.isEmpty(login.getCorreoEmpresarial()) && !StringUtils.isEmpty(login.getContrasena())) {
-			// Consulto en base de datos si se encuentra ese correo y esa
-			// contrase�a
-			String resultado = loginDao.authenticate(login.getCorreoEmpresarial(), login.getContrasena());
+    /*
+     * Consulto si los datos no vienen nulos
+     */
+    if (!StringUtils.isEmpty(login.getCorreoEmpresarial())
+        && !StringUtils.isEmpty(login.getContrasena())) {
+      // Consulto en base de datos si se encuentra ese correo y esa
+      // contrase�a
+      String resultado = loginDao.authenticate(login.getCorreoEmpresarial(), login.getContrasena());
 
-			// Si el resultado no es vacio es por que si existe ese correo y esa
-			// contrase�a
-			if (!resultado.isEmpty()) {
+      // Si el resultado no es vacio es por que si existe ese correo y esa
+      // contrase�a
+      if (!resultado.isEmpty()) {
 
-				// Creo un Json Web Token para validar si la sesi�n esta
-				// activa
-				String jwt = jwtUtil.generateToken(resultado, login.getCorreoEmpresarial());
+        // Creo un Json Web Token para validar si la sesi�n esta
+        // activa
+        String jwt = jwtUtil.generateToken(resultado, login.getCorreoEmpresarial());
 
-				// Guardo el JWT como atributo de sesi�n
-				request.getSession().setAttribute("token", jwt);
+        // Guardo el JWT como atributo de sesi�n
+        request.getSession().setAttribute("token", jwt);
 
-				// Guarda la sesion en el manejador de sesiones
-				sessionManager.guardarSession("SESSION:" + login.getCorreoEmpresarial(), jwt);
+        // Guarda la sesion en el manejador de sesiones
+        sessionManager.guardarSession("SESSION:" + login.getCorreoEmpresarial(), jwt);
 
-				// Cargo las cantidades
-				cargarRegistros(model);
-				
-				// Redirijo al index debido a que el usuario ya fue autenticado
-				// con exito
-				return "Administrador/IndexAdmin";
+        // Cargo las cantidades
+        cargarRegistros(model);
 
-			} else {
+        // Redirijo al index debido a que el usuario ya fue autenticado
+        // con exito
+        return "Administrador/IndexAdmin";
 
-				/**
-				 * Guardo en una variable el mensaje de error indicando que el
-				 * usuario o la contrase�a fueron incorrectos debido a que no
-				 * se encuentran en la base de datos y asi pueda ser entendida
-				 * por los archivos .JSP
-				 */
-				model.addAttribute("wrong", "Usuario o contrase�a incorrectos.");
-			}
-			// Redirecciono al login debido a que la autenticaci�n fue
-			// incorrecta
-			return "Administrador/Login";
-		} else {
-			/**
-			 * Guardo en una variable el mensaje de error indicando que el
-			 * usuario o la contrase�a son nulos siendo estos datos son
-			 * obligatorios, y asi pueda ser entendida por los archivos .JSP
-			 */
-			model.addAttribute("wrong", "El usuario y la contrase�a no pueden ser nulos.");
-			// Redirecciono al login debido a que la autenticaci�n fue
-			// incorrecta
-			return "Administrador/Login";
-		}
-	}
+      } else {
 
-	@GetMapping("/indexAdmin") // Base
-	public String indexAdmin(Model model) {
+        /**
+         * Guardo en una variable el mensaje de error indicando que el usuario o la contrase�a
+         * fueron incorrectos debido a que no se encuentran en la base de datos y asi pueda ser
+         * entendida por los archivos .JSP
+         */
+        model.addAttribute("wrong", Mensajes.USUARIOOCONTRASEÑAINCORRECTOS);
+      }
+      // Redirecciono al login debido a que la autenticaci�n fue
+      // incorrecta
+      return "Administrador/Login";
+    } else {
+      /**
+       * Guardo en una variable el mensaje de error indicando que el usuario o la contrase�a son
+       * nulos siendo estos datos son obligatorios, y asi pueda ser entendida por los archivos .JSP
+       */
+      model.addAttribute("wrong", Mensajes.USUARIOCONTRASEANULOS);
+      // Redirecciono al login debido a que la autenticaci�n fue
+      // incorrecta
+      return "Administrador/Login";
+    }
+  }
 
-		cargarRegistros(model);
-		return "Administrador/IndexAdmin"; // Nombre del archivo jsp
-	}
+  @GetMapping("/indexAdmin") // Base
+  public String indexAdmin(Model model) {
 
-	private void cargarRegistros(Model model) {
-		model.addAttribute("catidadTipoProductos", tipoProductoDao.getCantidadRegistros());
-		model.addAttribute("catidadProductos", productoDao.getCantidadRegistros());
-		model.addAttribute("catidadVendedores", vendedorDao.getCantidadRegistros());
-		model.addAttribute("catidadVentas", ventaDao.getCantidadRegistros());
-	}
+    cargarRegistros(model);
+    return "Administrador/IndexAdmin"; // Nombre del archivo jsp
+  }
 
-	@GetMapping("/logout")
-	private String getLogOut(String token, HttpServletRequest request) {
-		request.getSession().invalidate();
-		String correo = jwtUtil.parseToken(token);
-		sessionManager.eliminarSesion("SESSION:" + correo);
-		return "Administrador/Login"; // Nombre del archivo jsp
-	}
+  private void cargarRegistros(Model model) {
+    model.addAttribute("catidadTipoProductos", tipoProductoDao.getCantidadRegistros());
+    model.addAttribute("catidadProductos", productoDao.getCantidadRegistros());
+    model.addAttribute("catidadVendedores", vendedorDao.getCantidadRegistros());
+    model.addAttribute("catidadVentas", ventaDao.getCantidadRegistros());
+  }
+
+  @GetMapping("/logout")
+  private String getLogOut(String token, HttpServletRequest request) {
+    request.getSession().invalidate();
+    String correo = jwtUtil.parseToken(token);
+    sessionManager.eliminarSesion("SESSION:" + correo);
+    return "Administrador/Login"; // Nombre del archivo jsp
+  }
+
+  @GetMapping("/recordar") // Base
+  public String recordar() {
+    return "Administrador/Recordar"; // Nombre del archivo jsp
+  }
+
+  @PostMapping("/recordarContrasena")
+  public String recordarContraseña(@ModelAttribute("login") Login login, Model model,
+      HttpServletRequest request) {
+    
+    if(login.getCorreoEmpresarial().equals("")) {
+      model.addAttribute("wrong","Debes anotar por lo menos el correo.");
+      return "Administrador/Recordar";
+    }else {
+      String mensaje = usuarioDao.enviarCorreo(login.getCorreoEmpresarial());
+      if(mensaje.equals("Actualizacion")) {
+        model.addAttribute("result","Contraseña recuparada con éxito");
+        return "Administrador/Login";
+      }else {
+        model.addAttribute("wrong",mensaje);
+        return "Administrador/Recordar";
+      }
+    }
+
+}
 
 }
