@@ -1,19 +1,14 @@
 package com.todouno.kardex.data;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.sql.DataSource;
+
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+
 import com.todouno.kardex.dto.ResultDB;
 
 public class DataMgr {
@@ -53,7 +48,7 @@ public class DataMgr {
     executeDml("CREATE TABLE IF NOT EXISTS DETALLE ( codigo int auto_increment primary key NOT NULL, cantidad VARCHAR(1000) NOT NULL , producto int NOT NULL, factura int NOT NULL, foreign key (producto) references PRODUCTO(codigo), foreign key (factura) references FACTURA(codigo) ) ");
     executeDml("CREATE TABLE IF NOT EXISTS USUARIO ( correo VARCHAR(1000) NOT NULL primary key, contrasena VARCHAR(1000) NOT NULL) ");
     executeDml("INSERT INTO  USUARIO(correo,contrasena) VALUES('eygarcia@softcaribbean.com','1234')");
-    executeDml("INSERT INTO  USUARIO(correo,contrasena) VALUES('smunevar@softcaribbean.com','1234')");
+    //executeDml("INSERT INTO  USUARIO(correo,contrasena) VALUES('smunevar@softcaribbean.com','1234')");
   }
  
   
@@ -173,42 +168,5 @@ public class DataMgr {
   public void setDataSource(DataSource dataSource) {
     this.dataSource = dataSource;
 }
-  
-  
-  public static void main(String[] args) {
-
-    DataMgr d = new DataMgr();
-    
-    
-    String url = "jdbc:h2:mem:";
-
-    try (Connection con = DriverManager.getConnection(url);
-        Statement st = con.createStatement();
-        ResultSet rs = st.executeQuery("SELECT 1+1")) {
-
-      if (rs.next()) {
-
-        System.out.println(rs.getInt(1));
-      }
-
-      int x = st.executeUpdate("CREATE TABLE TIPOPRODUCTO ( codigo int auto_increment primary key NOT NULL, nombre VARCHAR(1000) NOT NULL , descripcion VARCHAR(1000) NOT NULL) ");
-      //int x = st.executeUpdate("CREATE TABLE PRODUCTO");
-      x = st.executeUpdate(" INSERT INTO  TIPOPRODUCTO(nombre,descripcion) VALUES('ALGO','TEST')");
-      ResultSet rs2 = st.executeQuery("SELECT * FROM TIPOPRODUCTO");
-      
-      if (rs2.next()) {
-
-        System.out.println(rs2.getInt("codigo"));
-        System.out.println(rs2.getString("nombre"));
-        System.out.println(rs2.getString("descripcion"));
-      }
-      
-      System.out.println(x);
-    } catch (SQLException ex) {
-
-      Logger lgr = Logger.getLogger(DataMgr.class.getName());
-      lgr.log(Level.SEVERE, ex.getMessage(), ex);
-    }
-  }
 
 }

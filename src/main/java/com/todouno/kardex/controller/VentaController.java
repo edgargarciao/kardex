@@ -70,11 +70,8 @@ public class VentaController {
 	 * @return La pagina de registro de tipos de productos.
 	 */
 	@GetMapping("/registrarVenta") // Base
-	public String registrarProducto(Model model) {
-		// Categoria categoria = ventaDao.obtenerCategoriaPorId(idCategoria);
-
+	public String registrarVenta(Model model) {
 		model.addAttribute("productos", productoDao.getMapaDeProductos());
-		// model.addAttribute("clientes", clienteDao.getListaClientes());
 		model.addAttribute("precioproductos", productoDao.getMapaDePrecioProductos());
 		model.addAttribute("cantidadproductos", productoDao.getMapaDeCantidadProductos());
 		model.addAttribute("vendedores", vendedorDao.getMapaDeVendedores());
@@ -82,7 +79,7 @@ public class VentaController {
 	}
 
 	@PostMapping(value = "/servicios/guardarVenta")
-	public @ResponseBody ResponseEntity<String> RegistrarVenta(@RequestBody Factura venta) {
+	public @ResponseBody ResponseEntity<String> guardarVenta(@RequestBody Factura venta) {
 
 		// Consulta si tiene todos los campos llenos
 		if (venta.isValidoParaRegistrar()) {

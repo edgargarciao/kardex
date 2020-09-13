@@ -45,7 +45,7 @@ public class VentaDao {
 		return facturas;
 	}
 
-	private List<DetalleFactura> getDetalles(int codigoFactura, Factura factura) {
+	protected List<DetalleFactura> getDetalles(int codigoFactura, Factura factura) {
 		List<DetalleFactura> detalles = new LinkedList<>();
 
 		MapSqlParameterSource map = new MapSqlParameterSource();
@@ -84,18 +84,18 @@ public class VentaDao {
 		String query = "INSERT INTO FACTURA(fecha,totalFactura,vendedor,iva,total) VALUES(CURRENT_DATE(),:totalFactura,:vendedor,:iva,:total)";
 
 		// Ejecutar la sentencia
-		ResultDB result = null;
+		ResultDB result = new ResultDB();
 		try {
 			result = dataMgr.executeDmlWithKey(query, map);
+			insertarDetalles(result.getKey(), venta);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		insertarDetalles(result.getKey(), venta);
+		
 		// Si hubieron filas afectadas es por que si hubo registro, en caso
 		// contrario muestra el mensaje
 		// de error.
-		return (result.getResult() == 1) ? "Registro exitoso"
+		return ( result.getResult() == 1) ? "Registro exitoso"
 				: "Error en el sistema. Por favor contacte al administrador.";
 
 	}
@@ -115,12 +115,10 @@ public class VentaDao {
 			// Ejecutar la sentencia
 			try {
 				dataMgr.executeDml(query, map);
+				actualizarStockProducto(detalleFactura.getProducto().getCodigo(), detalleFactura.getCantidad());
 			} catch (Exception e) {
-				e.printStackTrace();
+				throw new RuntimeException(e);
 			}
-
-			actualizarStockProducto(detalleFactura.getProducto().getCodigo(), detalleFactura.getCantidad());
-
 		}
 
 	}
@@ -141,7 +139,7 @@ public class VentaDao {
 		try {
 			dataMgr.executeDml(query, map);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 
 	}

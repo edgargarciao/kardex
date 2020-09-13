@@ -118,7 +118,7 @@ public class VendedorController {
    * @return La pagina a donde debe redireccionar despues de la accion.
    */
   @PostMapping(value = "/editarVendedor")
-  public String editarvendedor(@ModelAttribute("vendedor") Vendedor vendedor,
+  public String editarVendedor(@ModelAttribute("vendedor") Vendedor vendedor,
       Model model) {
 
     // Consulta si tiene todos los campos llenos

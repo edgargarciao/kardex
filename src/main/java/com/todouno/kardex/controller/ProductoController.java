@@ -177,7 +177,7 @@ public class ProductoController {
    * @return La pagina a donde debe redireccionar despues de la accion.
    */
   @PostMapping(value = "/borrarProducto")
-  public String borrarTipoProducto(@ModelAttribute("producto") Producto producto, Model model) {
+  public String borrarProducto(@ModelAttribute("producto") Producto producto, Model model) {
     
       String mensaje = productoDao.eliminarProducto(producto);
       if (mensaje.equals("Eliminacion exitosa")) {

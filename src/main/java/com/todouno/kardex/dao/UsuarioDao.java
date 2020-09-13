@@ -1,22 +1,21 @@
 package com.todouno.kardex.dao;
 
 import java.util.Properties;
+
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+
 import com.todouno.kardex.data.DataMgr;
-import com.todouno.kardex.util.MailUtil;
 
 public class UsuarioDao {
 
   private DataMgr dataMgr;
-  private MailUtil mailUtil;
   private JavaMailSenderImpl javaMailSender;
 
   public UsuarioDao() {
     dataMgr = new DataMgr();
-    mailUtil = new MailUtil();
     javaMailSender = new JavaMailSenderImpl();
     javaMailSender.setHost("smtp.gmail.com");
     javaMailSender.setPort(587);
@@ -41,7 +40,6 @@ public class UsuarioDao {
    * @return La cantidad de actividades registradas.
    */
   public String enviarCorreo(String correo) {
-    int cant = 0;
     // Consulta para realizar en base de datos
     MapSqlParameterSource map = new MapSqlParameterSource();
     map.addValue("correo", correo);
@@ -56,10 +54,8 @@ public class UsuarioDao {
     String mensaje = "El correo no esta registrado en el sistema. Contacte al administrador.";
     if (!pass.equals("")) {
 
-      String subject = "Recuperación de contraseña TODO1";
-      String body = "Su contraseña es : " + pass;
-      String to[] = {correo};
-      // mensaje = mailUtil.sendFromGMail(to, subject, body);
+      String subject = "Recuperacion de credencial TODO1";
+      String body = "Su password es : " + pass;
 
       SimpleMailMessage smm = new SimpleMailMessage();
 
@@ -71,34 +67,11 @@ public class UsuarioDao {
         javaMailSender.send(smm);
         mensaje = "Actualizacion";
       }catch(Exception e) {
+    	e.printStackTrace();
         mensaje = "Correo no autorizado. Debes permitir el acceso de aplicaciones no seguras en la configuracion de google.";
       }
       
     }
     return mensaje;
   }
-
-  /*public String actualizarUsuario(String correo, Usuario usuario) {
-    // Agrego los datos del registro (nombreColumna/Valor)
-    MapSqlParameterSource map = new MapSqlParameterSource();
-    map.addValue("correo", correo);
-    map.addValue("contraseña", usuario.getContraseñaNueva());
-
-
-    // Armar la sentencia de actualización debase de datos
-    String query =
-        "UPDATE usuario SET contraseña = :contraseña WHERE correoInstitucional = :correo";
-
-    // Ejecutar la sentencia
-    int result = 0;
-    try {
-      result = dataMgr.executeDml(query, map);
-    } catch (Exception e) {
-      new Exception();
-    }
-    // Si hubieron filas afectadas es por que si hubo registro, en caso contrario muestra el mensaje
-    // de error.
-    return (result == 1) ? "Actualizacion exitosa"
-        : "Error al actualizar la contraseña. Contacte al administrador del sistema.";
-}*/
 }

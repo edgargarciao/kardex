@@ -109,7 +109,7 @@ public class AdminController {
          * fueron incorrectos debido a que no se encuentran en la base de datos y asi pueda ser
          * entendida por los archivos .JSP
          */
-        model.addAttribute("wrong", Mensajes.USUARIOOCONTRASEÑAINCORRECTOS);
+        model.addAttribute("wrong", Mensajes.USUARIOOCONTRASENAINCORRECTOS);
       }
       // Redirecciono al login debido a que la autenticaci�n fue
       // incorrecta
@@ -141,7 +141,7 @@ public class AdminController {
   }
 
   @GetMapping("/logout")
-  private String getLogOut(String token, HttpServletRequest request) {
+  public String getLogOut(String token, HttpServletRequest request) {
     request.getSession().invalidate();
     String correo = jwtUtil.parseToken(token);
     sessionManager.eliminarSesion("SESSION:" + correo);
@@ -154,7 +154,7 @@ public class AdminController {
   }
 
   @PostMapping("/recordarContrasena")
-  public String recordarContraseña(@ModelAttribute("login") Login login, Model model,
+  public String recordarContrasena(@ModelAttribute("login") Login login, Model model,
       HttpServletRequest request) {
     
     if(login.getCorreoEmpresarial().equals("")) {
@@ -163,7 +163,7 @@ public class AdminController {
     }else {
       String mensaje = usuarioDao.enviarCorreo(login.getCorreoEmpresarial());
       if(mensaje.equals("Actualizacion")) {
-        model.addAttribute("result","Contraseña recuparada con éxito");
+        model.addAttribute("result","Contraseña recuparada con �xito");
         return "Administrador/Login";
       }else {
         model.addAttribute("wrong",mensaje);
