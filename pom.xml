@@ -159,13 +159,7 @@
 			<artifactId>google-api-client-appengine</artifactId>
 			<version>1.23.0</version>
 		</dependency>
-		
-		<dependency>
-			<groupId>com.google.cloud.sql</groupId>
-			<artifactId>mysql-socket-factory</artifactId>
-			<version>1.0.8</version>
-		</dependency>
-		<!-- [END dependencies] -->
+	
 
 
 		<dependency>
@@ -173,6 +167,14 @@
 			<artifactId>appengine-api-1.0-sdk</artifactId>
 			<version>1.9.64</version>
 		</dependency>
+		
+		 <dependency>
+           <groupId>org.springframework.cloud</groupId>
+           <artifactId>spring-cloud-gcp-dependencies</artifactId>
+           <version>1.2.3.RELEASE</version>
+           <type>pom</type>
+           <scope>import</scope>
+       </dependency>
 
 
 	</dependencies>
@@ -180,6 +182,7 @@
 		<finalName>todouno-kardex</finalName>
 
 		<sourceDirectory>src/main/java</sourceDirectory>
+		<outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -199,11 +202,37 @@
 					<path>/</path>
 				</configuration>
 			</plugin>
+			
+		
+	
+			<!-- [START plugins] -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.0.0</version>
+				<configuration>
+					<webResources>
+						<!-- in order to interpolate version from pom into appengine-web.xml -->
+						<resource>
+							<directory>${basedir}/src/main/webapp/WEB-INF</directory>
+							<filtering>true</filtering>
+							<targetPath>WEB-INF</targetPath>
+						</resource>
+					</webResources>
+				</configuration>
+			</plugin>
 
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.5</version>
+				<configuration>
+                    <excludes>
+                        <exclude>**/com/todouno/kardex/config/*</exclude>
+                        <exclude>**/com/todouno/kardex/dto/*</exclude>
+                        <exclude>**/com/todouno/kardex/constantes/*</exclude>
+                    </excludes>
+                </configuration>
 				<executions>
 					<execution>
 						<goals>

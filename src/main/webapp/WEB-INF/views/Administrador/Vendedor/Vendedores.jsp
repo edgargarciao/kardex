@@ -101,8 +101,8 @@
 												<td scope="row">${vendedor.nombres}</td>
 												<td scope="row">${vendedor.documento}</td>
 												<td scope="row">${vendedor.telefono}</td>
-												<td scope="row">${vendedor.correo}</td>
 												<td scope="row">${vendedor.fechaDeNacimiento}</td>
+												<td scope="row">${vendedor.correo}</td>												
 												<td><a
 													href="${contextPath}/actualizarVendedor?id=${vendedor.codigo}">
 														<button class="btn btn-outline-primary">

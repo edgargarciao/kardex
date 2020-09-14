@@ -69,7 +69,7 @@ public class DataMgrTest {
 	      } catch (ClassNotFoundException e) {
 	        e.printStackTrace();
 	      }
-	    dataSource = new DriverManagerDataSource(DataMgr.DB_URL);
+	    dataSource = new DriverManagerDataSource(dataMgr.DB_URL);
 	    dataMgr.setDataSource(dataSource);
 	    dataMgr.executeDml("DROP ALL OBJECTS");
 	    dataMgr.executeDml("CREATE TABLE IF NOT EXISTS VENDEDOR ( codigo int auto_increment primary key NOT NULL, nombres VARCHAR(1000) NOT NULL , documento VARCHAR(1000) NOT NULL , telefono VARCHAR(1000) NOT NULL, correo VARCHAR(1000) NOT NULL, fechaNacimiento DATE NOT NULL) ");
@@ -105,7 +105,7 @@ public class DataMgrTest {
 	      } catch (ClassNotFoundException e) {
 	        e.printStackTrace();
 	      }
-	    dataSource = new DriverManagerDataSource(DataMgr.DB_URL);
+	    dataSource = new DriverManagerDataSource(dataMgr.DB_URL);
 	    dataMgr.setDataSource(dataSource);
 	    dataMgr.executeDml("DROP ALL OBJECTS");
 	    dataMgr.executeDml("CREATE TABLE IF NOT EXISTS VENDEDOR ( codigo int auto_increment primary key NOT NULL, nombres VARCHAR(1000) NOT NULL , documento VARCHAR(1000) NOT NULL , telefono VARCHAR(1000) NOT NULL, correo VARCHAR(1000) NOT NULL, fechaNacimiento DATE NOT NULL) ");
